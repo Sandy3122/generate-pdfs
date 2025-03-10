@@ -78,5 +78,3 @@ storage.rules
 firestore.indexes.json
 .firebaserc
 firebase.target
-
-.cache
