@@ -202,22 +202,22 @@ const generateMultiPagePdf = async (profiles, batchSize = 5) => {
 };
 
 const generatePdfFunction = async (profiles) => {
+    let outputPath = null;
+    let compressedOutputPath = null;
+    
     try {
         if (!profiles || profiles.length === 0) {
             throw new Error('Profiles data is required');
         }
 
-        let outputPath;
         if(profiles.length === 1){
             outputPath = await generatePdf(profiles[0]);
-        }
-        else{
+        } else {
             outputPath = await generateMultiPagePdf(profiles);
         }
 
-        
-        // Compress the generated PDF (optional)
-        const compressedOutputPath = outputPath.replace('.pdf', '_compressed.pdf');
+        // Compress the generated PDF
+        compressedOutputPath = outputPath.replace('.pdf', '_compressed.pdf');
         await compressPdf(outputPath, compressedOutputPath);
 
         return {
@@ -226,6 +226,14 @@ const generatePdfFunction = async (profiles) => {
             path: compressedOutputPath,
         };
     } catch (error) {
+        // Clean up any files that might have been created before the error
+        if (outputPath && fs.existsSync(outputPath)) {
+            fs.unlinkSync(outputPath);
+        }
+        if (compressedOutputPath && fs.existsSync(compressedOutputPath)) {
+            fs.unlinkSync(compressedOutputPath);
+        }
+        
         console.error('Error in generatePdfFunction:', error);
         return {
             success: false,

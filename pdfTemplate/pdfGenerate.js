@@ -105,123 +105,6 @@ const getProfilePhoto = async (imgList) => {
     return isViewable ? profileUrl : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 };
 
-
-// // Route for generating profiles PDF
-// router.get('/generateProfilesPdf/:id?', async (req, res) => {
-
-//     try {
-//         console.log('testing');
-//         res.setTimeout(540000); // 9 minutes timeout
-//         const { id } = req.params;
-
-//         // Reference the Firestore collection
-//         const collectionRef = db.collection('appusers');
-//         let snapshot;
-
-//         if (id) {
-//             const docRef = collectionRef.doc(id);
-//             snapshot = await docRef.get();
-//             if (!snapshot.exists) {
-//                 return res.status(404).json({ error: "Record not found for the provided ID." });
-//             }
-//             snapshot = [snapshot]; // Convert to array for consistency
-//         } else {
-//             snapshot = await collectionRef.get();
-//             if (snapshot.empty) {
-//                 return res.status(404).json({ error: "No records found in the 'appusers' collection." });
-//             }
-//         }
-
-//         const fieldNames = ['id', 'aboutMeDescription', 'customerId', 'firstName', 'lastName', 'permanentAddress', 'dateOfBirth', 'birthPlace', 'manglikStatus', 'maritalStatus', 'timeOfBirth', 'height', 'religion', 'caste', 'diet', 'drink', 'smoke', 'primaryGuardian', 'primaryGuardianRelation', 'secondaryGuardian', 'secondaryGuardianRelation', 'noOfBrothers', 'noOfSisters', 'noOfBrothersMarried', 'noOfSistersMarried', 'educationLevel', 'educationField', 'workingWith', 'designation', 'annualIncome', 'partnerDetails', 'imgList'];
-        
-//         const retrievedDataArray = [];
-//         snapshot.forEach(doc => {
-//             const data = doc.data();
-//             const filteredData = { id: doc.id };
-//             fieldNames.forEach(fieldName => {
-//                 if (data[fieldName] !== undefined) {
-//                     filteredData[fieldName] = data[fieldName];
-//                 }
-//             });
-//             retrievedDataArray.push(filteredData);
-//         });
-
-
-//         const profileDataArray = retrievedDataArray.map((data) => ({
-//             // data: data.imgList?.[5]?.imgUrl || "-",
-//             aboutMe: truncateContent(data.aboutMeDescription, 8) || "-",
-//             fullName: `${capitalizeName(data.firstName || '')} ${capitalizeName(data.lastName || '')}` || "-",
-//             customerId: capitalizeName(data.id) || "-",
-//             age: calculateAge(data.dateOfBirth) || "-",
-//             birthDate: formatDateOfBirth(data.dateOfBirth) || "-",
-//             maritalStatus: camelCaseToNormal(data.maritalStatus || "-"),
-//             height: data.height || "-",
-//             religion: data.religion || "-",
-//             caste: data.caste || "-",
-//             manglik: camelCaseToNormal(data.manglikStatus || "-"),
-//             timeOfBirth: data.timeOfBirth || "-",
-//             placeOfBirth: data.birthPlace || "-",
-//             diet: camelCaseToNormal(data.diet || "-"),
-//             drink: camelCaseToNormal(data.drink || "-"),
-//             smoke: camelCaseToNormal(data.smoke || "-"),
-//             fatherName: data.primaryGuardian?.primaryGuardianRelation === 'father' ? data.primaryGuardian.primaryGuardianName : '-' || "-",
-//             motherName: data.secondaryGuardian?.secondaryGuardianRelation === 'mother' ? data.secondaryGuardian.secondaryGuardianName : '-' || "-",
-//             fatherOccupation: data.primaryGuardian?.primaryGuardianRelation === 'father' ? camelCaseToNormal(data.primaryGuardian.primaryGuardianOccupation) : '-' || "-",
-//             motherOccupation: data.secondaryGuardian?.secondaryGuardianRelation === 'mother' ? camelCaseToNormal(data.secondaryGuardian.secondaryGuardianOccupation) : '-' || "-",
-//             noOfSisters: data.noOfSisters || "-",
-//             noOfSistersMarried: data.noOfSistersMarried || "-",
-//             noOfBrothers: data.noOfBrothers || "-",
-//             noOfBrothersMarried: data.noOfBrothersMarried || "-",
-//             education: camelCaseToNormal(data.educationLevel || "-"),
-//             workingWith: camelCaseToNormal(data.workingWith || "-"),
-//             income: data.annualIncome || "-",
-//             profilePhoto: data.imgList?.[5]?.imgUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-//             // profilePhoto: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-//             // profilePhoto: getProfilePhoto(data.imgList),
-//             stateAndCity: `${camelCaseToNormal(data.permanentAddress.permanentState)}, ${camelCaseToNormal(data.permanentAddress.permanentCity)}` || "-",
-//             partnerAge: `${data.partnerDetails?.partnerMinAge || "-"} - ${data.partnerDetails?.partnerMaxAge || "-"}`,
-//             partnerReligion: camelCaseToNormal(data.partnerDetails?.partnerReligion) || "-",
-//             partnerMaritalStatus: camelCaseToNormal(data.partnerDetails?.partnerMaritalStatus) || "-",
-//             partnerCaste: camelCaseToNormal(data.partnerDetails?.partnerCaste) || "-",
-//             partnerLocation: camelCaseToNormal(data.partnerDetails?.partnerState) || "-",
-//             partnerEducationLevel: camelCaseToNormal(data.partnerDetails?.partnerEducationLevel) || "-",
-//             partnerWorkingWith: camelCaseToNormal(data.partnerDetails?.partnerWorkingWith) || "-",
-//             partnerManglik: camelCaseToNormal(data.partnerDetails?.partnerManglikStatus) || "-",
-//             partnerDiet: camelCaseToNormal(data.partnerDetails?.partnerDiet) || "-",
-//             partnerDrink: camelCaseToNormal(data.partnerDetails?.partnerDrink) || "-",
-//             partnerSmoke: camelCaseToNormal(data.partnerDetails?.partnerSmoke) || "-",
-//         }));
-
-//         let outputPath;
-//         // console.log(profileDataArray);
-//         if (profileDataArray.length === 1) {
-//             outputPath = await generatePdfFunction(profileDataArray);
-//         } else {
-//             const maxProfiles = profileDataArray.length; // For debuding purpose
-//             const limitedProfiles = profileDataArray.slice(0, maxProfiles);
-//             outputPath = await generatePdfFunction(limitedProfiles);
-//         }
-
-//         // console.log(outputPath);
-//         res.download(outputPath.path, 'profiles.pdf', (err) => {
-//             if (err) {
-//                 console.error('Error during file download:', err);
-//                 res.status(500).json({ error: "Failed to download the PDF file." });
-//             }
-//             fs.unlink(outputPath.path, (unlinkErr) => {
-//                 if (unlinkErr) console.error('Error deleting file:', unlinkErr);
-//             });
-//         });
-
-//     } catch (error) {
-//         console.error("Error generating PDF:", error);
-//         res.status(500).json({ error: "Internal server error." });
-//     }
-// });
-
-// Route for generating profiles PDF
-
-
 router.get('/generateProfilesPdf/:id?', async (req, res) => {
     try {
         console.log('Testing PDF generation...');
@@ -321,11 +204,21 @@ router.get('/generateProfilesPdf/:id?', async (req, res) => {
         res.download(outputPath.path, 'profiles.pdf', (err) => {
             if (err) {
                 console.error('Error during file download:', err);
-                res.status(500).json({ error: "Failed to download the PDF file." });
+                // Clean up file even if download fails
+                fs.unlink(outputPath.path, (unlinkErr) => {
+                    if (unlinkErr) console.error('Error deleting file:', unlinkErr);
+                });
+                return res.status(500).json({ error: "Failed to download the PDF file." });
             }
-            console.log('output: ', outputPath)
+            
+            // Clean up both original and compressed files
+            const originalPath = outputPath.path.replace('_compressed.pdf', '.pdf');
+            fs.unlink(originalPath, (unlinkErr) => {
+                if (unlinkErr) console.error('Error deleting original file:', unlinkErr);
+            });
+            
             fs.unlink(outputPath.path, (unlinkErr) => {
-                if (unlinkErr) console.error('Error deleting file:', unlinkErr);
+                if (unlinkErr) console.error('Error deleting compressed file:', unlinkErr);
             });
         });
 
