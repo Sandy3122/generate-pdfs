@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Admin</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-4">
+                    <span class="spanField">Profile ID:</span>
+                </div>
+                <div class="col-8">
+                    <span id="profileId"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-4">
+                    <span class="spanField">Delete Profile:</span>
+                </div>
+                <div class="col-8">
+                    <span id="deleteProfile"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-4">
+                    <span class="spanField">Reason for Delete:</span>
+                </div>
+                <div class="col-8">
+                    <span id="reasonForDelete"></span>
+                </div>
+            </div>
+            <!-- Error messages -->
+            <div id="errorMessages" class="text-danger"></div>
+
+            <div class="text-center my-4 d-flex justify-content-center">
+                <button id="deleteProfileButton" class="btn btn-sm btn-outline-danger">Delete Profile</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    function setInnerHTMLById(id, value) {
+        document.getElementById(id).innerHTML = value;
+    }
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        setInnerHTMLById("profileId", userData.customerId || "null");
+        setInnerHTMLById("deleteProfile", userData.deleteProfile || "null");
+        setInnerHTMLById("reasonForDelete", userData.reasonForDelete || "null");
+    }
+
+    // Call fetchUserData function with userId, userRole, and inputIds
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    console.log('userId :', userId)
+
+    
+    const inputIds = ['profileRegisteredById', 'deleteProfile', 'reasonForDelete'];
+
+    fetchUserData(userId);
+
+    // Event listener for the Delete Profile button
+    document.getElementById('deleteProfileButton').addEventListener('click', async function () {
+        const deleteProfile = document.getElementById('deleteProfile').innerText.trim().toLowerCase();
+        const reasonForDelete = document.getElementById('reasonForDelete').innerText.trim();
+        const errorMessages = document.getElementById('errorMessages');
+
+        // Clear previous error messages
+        errorMessages.innerHTML = '';
+
+        // Validation checks
+        if (deleteProfile !== 'yes') {
+            errorMessages.innerHTML += '<p>Delete Profile must be set to Yes.</p>';
+            return;
+        }
+
+        if (!reasonForDelete || reasonForDelete === 'null') {
+            errorMessages.innerHTML += '<p>Reason for Delete cannot be empty.</p>';
+            return;
+        }
+
+        // Show confirmation popup using SweetAlert
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            html: 'You are about to delete this profile. This action cannot be undone.<br/>Do you want to proceed?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        });
+
+        // Check if the user clicked the confirm button
+        if (confirmationResult.isConfirmed) {
+            try {
+                // Send a request to delete the profile
+                const response = await fetch(`/api/deleteUserProfile/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Check if the request was successful
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Show success alert using SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Profile Deleted',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Redirect to another page
+                            window.parent.location.href = '/dashboard/getall-userProfiles';
+                        });
+                    } else {
+                        // Show error alert using SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to delete profile: ' + data.message,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } else {
+                    // Show error alert using SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to delete profile: ' + response.statusText,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                console.error('Error deleting profile:', error);
+                // Show error alert using SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while deleting the profile. Please try again later.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
+
+    });
+</script>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Gallery</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="mb-2">
+                    <div class="col-12 col-lg-4 col-md-8 mb-3">
+                        <span class="spanField"><strong>Photos Verification Details: </strong></span>
+                    </div>
+                    <div class="photo-details spanField">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo1ImageLink" target="_blank"><span class="spanStrong">Photo
+                                        1:</span></a> Verified By Id:  <span id="photo1VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo1VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo1status"
+                                    class="spanStrong"></span>; Date:  <span id="photo1Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo2ImageLink" target="_blank"><span class="spanStrong">Photo
+                                        2:</span></a> Verified By Id:  <span id="photo2VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo2VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo2status"
+                                    class="spanStrong"></span>; Date:  <span id="photo2Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo3ImageLink" target="_blank"><span class="spanStrong">Photo
+                                        3:</span></a> Verified By Id:  <span id="photo3VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo3VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo3status"
+                                    class="spanStrong"></span>; Date:  <span id="photo3Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo4ImageLink" target="_blank"><span class="spanStrong">Photo
+                                        4:</span></a> Verified By Id:  <span id="photo4VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo4VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo4status"
+                                    class="spanStrong"></span>; Date:  <span id="photo4Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo5ImageLink" target="_blank"><span class="spanStrong">Photo
+                                        5:</span></a> Verified By Id:  <span id="photo5VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo5VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo5status"
+                                    class="spanStrong"></span>; Date:  <span id="photo5Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <a href="" id="photo6ImageLink" target="_blank"><span class="spanStrong">Profile
+                                     Image:</span></a> Verified By Id:  <span id="photo6VerifiedById"
+                                    class="spanStrong"></span>; Verified By Name:  <span id="photo6VerifiedByName" class="spanStrong"></span>;  Status:  <span id="photo6status"
+                                    class="spanStrong"></span>; Date:  <span id="photo6Date" class="spanStrong"></span>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Extract user ID from URL parameters
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    console.log('userId :', userId);
+
+    // Function to display data
+    function displayData(data) {
+        if (data.imgList) {
+            data.imgList.forEach((img, index) => {
+                const photoIndex = index + 1;
+                const imgVerificationData = String(img.imgVerificationBy);
+                const [imgVerificationByName, imgVerificationById, imgVerificationDateTime] = imgVerificationData.split('/')
+
+                setInnerHTMLById(`photo${photoIndex}VerifiedById`, imgVerificationById || '--')
+                setInnerHTMLById(`photo${photoIndex}VerifiedByName`,imgVerificationByName || '--')
+                setInnerHTMLById(`photo${photoIndex}Date`, imgVerificationDateTime ? formatDateTime(imgVerificationDateTime) : '--')
+                setHrefById(`photo${photoIndex}ImageLink`, img.imgUrl || "");
+
+                // Set status text content
+                const statusElement = document.getElementById(`photo${photoIndex}status`);
+                statusElement.textContent = img.imgVerificationStatus;
+
+                // Define the color based on the status
+                let color;
+                switch (img.imgVerificationStatus) {
+                    case 'verified':
+                        color = 'green'
+                        break;
+                    case 'rejected':
+                        color = 'red'
+                        break;
+                    case 'pending':
+                        color = 'orange'
+                        break;
+                    default:
+                        color = 'black';  // Black Color
+                }
+                // Update the color
+                statusElement.style.color = color;
+            });
+        }
+    }
+
+    // Fetch and display user data
+    (async function fetchData() {
+        try {
+            const userData = await fetchImageListById(userId);
+            console.log('userData :', userData);
+            displayData(userData);
+        } catch (error) {
+            console.log(error);
+        }
+    })();
+</script>
+
+</html>

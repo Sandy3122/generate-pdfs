@@ -1,0 +1,23 @@
+/* Hide scrollbar for both table and body */
+.table-responsive::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0 !important;  /* Remove scrollbar space */
+    height: 0 !important;
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+/* Optional: show position indicator */
+.table-responsive::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: transparent;  /* Optional: just make scrollbar thumb invisible */
+}
+
+/* Apply height:auto to .table-responsive when it has vh-100 class */
+.table-responsive.vh-100 {
+    height: auto !important;
+}
+
+/* Set default font size for body */
+body {
+    font-size: medium;
+}

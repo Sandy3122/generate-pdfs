@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Rights Dashboard</title>
+    <link rel="stylesheet" href="/css/tableStyles.css">
+    <script src="/js/customer/allScripts.js"></script>
+    <style>
+        .table-responsive {
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div class="container-fluid mt-1">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="fs-3 px-2 pt-1">Access Rights Table</span>
+                <button style="float: right;" class="btn btn-primary btn-sm mt-1" onclick="showAddRoleRightsModal()">Add
+                    Role Rights</button>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-dark text-center">
+                            <tr class="tr">
+                                <th>S.no</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th id="accessed-routes">Accessed Routes</th>
+                                <th>Actions</th>
+                                <th>Routes</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accessRightsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding role rights -->
+    <div class="modal fade" id="addRoleRightsModal" tabindex="-1" aria-labelledby="addRoleRightsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoleRightsModalLabel">Add Role Rights</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRoleRightsForm">
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Select Role</label>
+                            <!-- <select data-dropdown="accessRoles" id="role" class="form-select" disabled></select> -->
+                            <!-- <select class="form-select" id="role" required>
+                                <option value="" hidden>Select Role</option>
+                                <option value="user">User</option>
+                                <option value="superAdmin">Super Admin</option>
+                                <option value="superAdmin">Admin</option>
+                                <option value="manager">Manager</option>
+                                <option value="employee">Employee</option>
+                                <option value="thirdPartyAgent">Third Party Agent</option>
+                            </select> -->
+                            <input type="text" class="form-control" id="role" name="role" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <!-- <select data-dropdown="accessRoleStatus" id="role" class="form-select" disabled></select> -->
+                            <select class="form-select" id="status" required>
+                                <option value="" hidden>Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- Include employeeRoutes.js file -->
+<script src="/js/employeeRoutes.js"></script>
+<script>
+      // Function to show the add role rights modal
+  function showAddRoleRightsModal() {
+    $('#addRoleRightsModal').modal('show');
+}
+
+// Function to handle form submission for adding role rights
+document.getElementById('addRoleRightsForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    
+    const role = document.getElementById('role').value;
+    const status = document.getElementById('status').value;
+
+    try {
+        const response = await fetch('/api/access-rights', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ role, status })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to add role rights');
+        }
+
+        // Hide the modal after success
+        $('#addRoleRightsModal').modal('hide');
+        
+        // Display success alert
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Role rights added successfully!'
+        });
+
+        // Refresh the access rights table
+        await fetchAccessRights();
+    } catch (error) {
+        // Display error alert with SweetAlert
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'An error occurred while adding role rights'
+        });
+
+        console.error('Error adding role rights:', error);
+    }
+});
+
+
+async function updateAccessRightStatus(accessRightId, status) {
+    try {
+        const response = await fetch(`/api/access-rights/${accessRightId}/status`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update access right status");
+        }
+
+        const data = await response.json();
+
+        // Update the status in the table cell
+        const statusCell = document.querySelector(`#status-${accessRightId}`);
+        statusCell.textContent = status;
+        statusCell.className = status === "active" ? "status-active" : "status-inactive";
+        console.log("Access right status updated successfully:", data);
+    } catch (error) {
+        console.error("Error updating access right status:", error);
+    }
+}
+
+async function updateAccessRightRoutes(accessRightId) {
+    console.log('updateAccessRightRoutes: ', accessRightId);
+    
+    try {
+        // Fetch all access rights from the general endpoint
+        const response = await fetch(`/api/access-rights`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch access rights data");
+        }
+        const accessRights = await response.json();
+        console.log('Fetched Access Rights:', accessRights);
+
+        // Filter to find the specific accessRight by ID
+        const accessRight = accessRights.find(ar => ar.id === accessRightId);
+        if (!accessRight) {
+            throw new Error(`Access right with ID ${accessRightId} not found`);
+        }
+
+        // Collect currently checked checkboxes
+        let checkedRoutes = [];
+        document.querySelectorAll(`#routeCheckbox-${accessRightId}:checked`).forEach(checkbox => {
+            checkedRoutes.push(checkbox.value);
+        });
+
+        // Remove duplicates
+        checkedRoutes = [...new Set(checkedRoutes)];
+
+        // Log the checked routes for debugging
+        console.log('Checked Routes:', checkedRoutes);
+
+        // Send update request with only the checked routes
+        const updateResponse = await fetch(`/api/access-rights/${accessRightId}/routes`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ routeName: checkedRoutes }),
+        });
+
+        if (!updateResponse.ok) {
+            throw new Error("Failed to update access right routes");
+        }
+
+        const data = await updateResponse.json();
+
+        // Update the displayed route names
+        const routeNamesCell = document.querySelector(`#routeNames-${accessRightId}`);
+        routeNamesCell.innerHTML = generateRouteName(checkedRoutes);
+        console.log("Access right routes updated successfully:", data);
+    } catch (error) {
+        console.error("Error updating access right routes:", error);
+    }
+}
+
+// Add event listeners to checkboxes to trigger updateAccessRightRoutes function
+function addCheckboxEventListeners() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('click', function () {
+            const accessRightId = this.id.split('-')[1];
+            updateAccessRightRoutes(accessRightId);
+        });
+    });
+}
+
+async function deleteAccessRight(accessRightId) {
+Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+}).then(async (result) => {
+    if (result.isConfirmed) {
+        try {
+            const response = await fetch(`/api/access-rights/${accessRightId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete access right');
+            }
+
+            // Refresh the access rights table after deletion
+            await fetchAccessRights();
+
+            Swal.fire(
+                'Deleted!',
+                'Access right has been deleted.',
+                'success'
+            );
+        } catch (error) {
+            console.error('Error deleting access right:', error);
+            Swal.fire(
+                'Error!',
+                'Failed to delete access right.',
+                'error'
+            );
+        }
+    }
+});
+}
+
+
+function generateRouteCheckboxes(routeName, accessRightId) {
+    let checkboxesHTML = "";
+    employeeRoutes.forEach(route => {
+        checkboxesHTML += `
+        <li class="dropdown-item">
+            <label class="checkbox-inline">
+                <input type="checkbox" id="routeCheckbox-${accessRightId}" value="${route}" ${routeName.includes(route) ? 'checked' : ''}> ${route}
+            </label>
+        </li>
+    `;
+    });
+    return checkboxesHTML;
+}
+
+
+// function generateRouteName(routeName) {
+//     let routeHTML = "";
+//     routeName.forEach(route => {
+//         routeHTML += `<span>${route}</span>`;
+//     });
+//     return routeHTML;
+// }
+
+
+// Function to generate route names with unique IDs
+function generateRouteName(routeName, accessRightId) {
+    // Use a Set to remove duplicate routes
+    const uniqueRoutes = [...new Set(routeName)];
+
+    let routeHTML = "";
+    uniqueRoutes.forEach((route, index) => {
+        // Remove '/' and '-' from route, and split into words
+        let formattedRoute = route
+            .replace(/\//g, '')       // Remove '/'
+            .replace(/-/g, ' ')       // Replace '-' with space
+            .split(' ')               // Split the words by space
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+            .join(' ');               // Join them back into a string
+        
+        // Add a span with initial green color and onclick event handler
+        routeHTML += ` 
+            <span id="route-${accessRightId}-${index}" data-route="${formattedRoute}" style="
+                display: inline-block; 
+                border: 1px solid black; 
+                background-color: green;  /* Initially green for Write */
+                padding: 4px 8px; 
+                margin: 3px; 
+                border-radius: 6px;
+                font-size: 14px;
+                color: white;  /* White text for readability */
+                cursor: pointer;
+            " onclick="handleRouteClick('route-${accessRightId}-${index}')">
+                ${formattedRoute}
+            </span>`;
+    });
+
+    return routeHTML;
+}
+
+// Function to handle the click event and toggle between Read (red) and Write (green)
+function handleRouteClick(elementId) {
+    // Get the element by its ID
+    let routeElement = document.getElementById(elementId);
+
+    // Toggle logic: Check the current background color and toggle accordingly
+    if (routeElement.style.backgroundColor === 'green') {
+        // If it's green (Write), change it to red (Read)
+        routeElement.style.backgroundColor = 'red';
+        routeElement.style.color = 'white'; // Ensure text is readable
+    } else {
+        // Otherwise, set it to green (Write)
+        routeElement.style.backgroundColor = 'green';
+        routeElement.style.color = 'white'; // Ensure text is readable
+    }
+}
+
+// Update the fetchAccessRights function to pass accessRightId to generateRouteName
+async function fetchAccessRights() {
+    showLoader();
+    const accessRightsTableBody = document.getElementById("accessRightsTableBody");
+    try {
+        const response = await fetch("/api/access-rights");
+        const data = await response.json();
+        accessRightsTableBody.innerHTML = "";
+
+        data.forEach((accessRight, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="text-center">${index + 1}</td>
+                <td class="text-center">${accessRight.role}</td>
+                <td id="status-${accessRight.id}" class="text-center ${accessRight.status === "active" ? "status-active" : "status-inactive"}">${accessRight.status}</td>
+                <td id="routeNames-${accessRight.id}">${generateRouteName(accessRight.routeName, accessRight.id)}</td>
+                
+                <td class="text-center">
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="actionsDropdown-${accessRight.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-start position-absolute" aria-labelledby="actionsDropdown-${accessRight.id}">
+                            <li><a class="dropdown-item" href="#" onclick="updateAccessRightStatus('${accessRight.id}', 'active')">Active</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="updateAccessRightStatus('${accessRight.id}', 'inactive')">In-Active</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="routeNames-${accessRight.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                            Routes
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="routeNames-${accessRight.id}" style="max-height: 200px; overflow-y: auto;">
+                            ${generateRouteCheckboxes(accessRight.routeName, accessRight.id)}
+                        </ul>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-danger" onclick="deleteAccessRight('${accessRight.id}')">Delete</button>
+                </td>
+            `;
+            accessRightsTableBody.appendChild(row);
+            hideLoader();
+        });
+
+        // Add event listeners to checkboxes
+        addCheckboxEventListeners();
+    } catch (error) {
+        console.error("Error fetching access rights:", error);
+    }
+}
+
+
+
+// Function to run both async operations in order
+async function populateDropDownsAndFetchAccessRights() {
+    try {
+        showLoader();
+        // First populate dropdowns
+        await populateDropdowns();
+        // Once dropdowns are populated, fetch the access rights
+        await fetchAccessRights();
+        hideLoader();
+    } catch (error) {
+        console.error('Error while loading the data:', error);
+    }
+};
+
+populateDropDownsAndFetchAccessRights();
+
+</script>
+
+</html>

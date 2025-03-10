@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Form Fields with Bootstrap</title>
+  <!-- Bootstrap CSS CDN link -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-4 col-lg-4">
+        <span class="spanField">No of Brothers:</span>
+      </div>
+      <div class="col-lg-6 col-8">
+        <input type="text" id="noOfBrothers" class="form-control" value="">
+      </div>
+    </div>
+
+    <div class="row" id="brothersDetails"></div>
+  </div>
+  <!-- Bootstrap JS and Popper.js CDN links (for Bootstrap functionality) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.getElementById('noOfBrothers').addEventListener('change', function() {
+      var noOfBrothers = parseInt(this.value);
+      var brothersDetailsDiv = document.getElementById('brothersDetails');
+      brothersDetailsDiv.innerHTML = ''; // Clear previous content
+      
+      for (var i = 0; i < noOfBrothers; i++) {
+        var brotherDiv = document.createElement('div');
+        brotherDiv.classList.add('col-md-12', 'mb-2', 'd-flex', 'align-items-center');
+        
+        // Name field
+        var nameInputGroup = document.createElement('div');
+        nameInputGroup.classList.add('d-flex', 'align-items-center', 'col-md-6', 'mb-2', 'pr-md-1');
+        
+        var nameLabelDiv = document.createElement('span'); // Div for nameLabel
+        nameLabelDiv.innerHTML = 'Name:';
+        nameLabelDiv.classList.add('mr-3')
+        nameInputGroup.appendChild(nameLabelDiv);
+        
+        var nameInputDiv = document.createElement('div'); // Div for nameInput
+        var nameInput = document.createElement('input');
+        nameInput.setAttribute('type', 'text');
+        nameInput.setAttribute('class', 'form-control');
+        nameInput.setAttribute('name', 'brotherName' + i);
+        nameInput.setAttribute('id', 'brother' + i);
+        nameInputDiv.appendChild(nameInput);
+        
+        nameInputGroup.appendChild(nameInputDiv);
+        
+        // Married checkbox
+        var marriedCheckboxGroup = document.createElement('div');
+        marriedCheckboxGroup.classList.add('col-md-2', 'mb-2', 'px-md-1');
+        
+        var marriedLabel = document.createElement('label');
+        marriedLabel.setAttribute('for', 'brother' + i + 'MarriageStatus');
+        marriedLabel.innerText = 'Married:';
+        marriedCheckboxGroup.appendChild(marriedLabel);
+        
+        var marriedCheckbox = document.createElement('input');
+        marriedCheckbox.setAttribute('type', 'checkbox');
+        marriedCheckbox.setAttribute('name', 'brotherMarried' + i);
+        marriedCheckbox.setAttribute('id', 'brother' + i + 'MarriageStatus');
+        marriedCheckbox.classList.add('form-check-input', 'ml-2');
+        marriedCheckboxGroup.appendChild(marriedCheckbox);
+
+        // Unmarried checkbox
+        var unmarriedCheckboxGroup = document.createElement('div');
+        unmarriedCheckboxGroup.classList.add('col-md-2', 'mb-2', 'pl-md-1');
+        
+        var unmarriedLabel = document.createElement('label');
+        unmarriedLabel.setAttribute('for', 'brother' + i + 'UnmarriedStatus');
+        unmarriedLabel.classList.add('labelField');
+        unmarriedLabel.innerText = 'Unmarried:';
+        unmarriedCheckboxGroup.appendChild(unmarriedLabel);
+        
+        var unmarriedCheckbox = document.createElement('input');
+        unmarriedCheckbox.setAttribute('type', 'checkbox');
+        unmarriedCheckbox.setAttribute('name', 'brotherUnmarried' + i);
+        unmarriedCheckbox.setAttribute('id', 'brother' + i + 'UnmarriedStatus');
+        unmarriedCheckbox.classList.add('form-check-input', 'ml-2');
+        unmarriedCheckboxGroup.appendChild(unmarriedCheckbox);
+        
+        brotherDiv.appendChild(nameInputGroup);
+        brotherDiv.appendChild(marriedCheckboxGroup);
+        brotherDiv.appendChild(unmarriedCheckboxGroup);
+        brothersDetailsDiv.appendChild(brotherDiv);
+      }
+    });
+  </script>
+</body>
+</html>

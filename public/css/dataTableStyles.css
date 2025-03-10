@@ -1,0 +1,81 @@
+.tableBtn, .buttons-print, .buttons-pdf, .buttons-excel{
+    width: 40px;
+    height: 30px;
+    font-size: 12px !important;
+    text-align: center;
+  }
+  .dt-paging-button{
+    /* width: 15px;
+    height: 15px; */
+    font-size: 16px !important;
+    text-align: center;
+    padding: 0px 6px !important;
+    border: none !important;
+    margin-top: 5px;
+  }
+  div.dt-buttons, div.dt-container .dt-length {
+    margin-top: 5px;
+  }
+
+  div.dt-container .dt-length {
+    margin-top: 8px;
+  }
+
+  text, .btn-primary, .buttons-print, .buttons-pdf, .buttons-excel{
+    margin: 3px 2px !important;
+    padding: 2px !important;
+  }
+
+      /* Custom CSS for DataTable */
+      .buttonsDiv .dataTables_paginate {
+    float: left !important;
+  }
+
+  .paging_full_numbers{
+    float:  right !important;
+  }
+  #userDataTable_info{
+    float: left !important;
+  }
+
+  #userDataTable{
+    margin: 0px 0px 6px 0 !important;
+  }
+  .dt-search{
+    float: right !important;
+    font-size: 18px !important;
+    margin: 0px 2px 8px 0 !important;
+  }
+  .dt-search label{
+    font-size: larger;
+    color: red;
+  }
+  .div.dt-container .dt-search input{
+    padding: 5px 95px 5px 5px;
+
+  }
+  .dt-length{
+    float: left !important;
+    font-size: 15px !important;
+    margin-left: 5px !important;
+  }
+  .dt-length label{
+    margin: 0 2px 0px 4px !important;
+    /* padding: 2px 4px !important; */
+    font-size: small !important;
+    text-transform: capitalize !important;
+  }
+
+  #userData td {
+    padding: 6px 8px !important;
+    text-align: center;
+  }
+
+  #userDataTable th{
+    padding: 8px 28px 8px 8px !important;
+    text-align: center;
+  }
+
+  th{
+    font-size: small;
+}

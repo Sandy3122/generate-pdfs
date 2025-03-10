@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <!-- Rendering all script tags and CDNS -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">User Registration</h2>
+        <form id="userRegistrationForm" class="mt-4">
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="firstName" class="form-label labelField">First Name:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required minlength="3"
+                        oninvalid="this.setCustomValidity('First name must be at least 3 characters long')"
+                        oninput="this.setCustomValidity('')" />
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label labelField">Last Name:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required minlength="3"
+                        oninvalid="this.setCustomValidity('Last name must be at least 3 characters long')"
+                        oninput="this.setCustomValidity('')" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="gender" class="form-label labelField">Gender:</label>
+                    <select data-dropdown="gender" class="form-select" id="gender" name="gender" required>
+                        <option value="" selected>Select Gender</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="profileFor" class="form-label labelField">Profile For:</label>
+                    <select data-dropdown="profileFor" class="form-select" id="profileFor" name="profileFor" required>
+                        <option value="" selected>Select Profile</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="email" class="form-label labelField">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="phoneNumber" class="form-label labelField">Phone Number:</label>
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required pattern="[0-9]{10}"
+                        maxlength="10" inputmode="numeric" oninvalid="this.setCustomValidity('Phone number must be 10 digits')"
+                        oninput="this.setCustomValidity('')" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="dateOfBirth" class="form-label labelField">Date Of Birth:</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control" placeholder="DD-MM-YYYY">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="maritalStatus" class="form-label labelField">Marital Status:</label>
+                    <select data-dropdown="maritalStatus" class="form-select" id="maritalStatus" name="maritalStatus" required>
+                        <option value="" selected>Select Marital Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="religion" class="form-label labelField">Religion:</label>
+                    <select data-dropdown="religion" class="form-select" id="religion" name="religion" required>
+                        <option value="" selected>Select Religion</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="noOfChild" class="form-label labelField">No Of Child:</label>
+                    <input type="phone" class="form-control" id="noOfChild" name="noOfChild" required maxlength="1" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" oninput="this.setCustomValidity('')" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-4">
+                    <label for="livingWithChild" class="form-label labelField">Living With Child:</label>
+                    <select data-dropdown="livingWithChild" class="form-select" id="livingWithChild" name="livingWithChild" required>
+                        <option value="" selected>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <label for="pin" class="form-label labelField">PIN/Password:</label>
+                    <input type="password" class="form-control" id="pin" name="pin" required pattern="[0-9]{4}" maxlength="4"
+                        inputmode="numeric" oninvalid="this.setCustomValidity('PIN/Password must be 4 digits')"
+                        oninput="this.setCustomValidity('')" />
+                </div>
+                <div class="col-md-3">
+                    <label for="confirmPin" class="form-label labelField">Confirm PIN/Password:</label>
+                    <input type="password" class="form-control" id="confirmPin" name="confirmPin" required pattern="[0-9]{4}"
+                        maxlength="4" inputmode="numeric" oninvalid="this.setCustomValidity('PIN/Password must be 4 digits')"
+                        oninput="this.setCustomValidity('')" />
+                    <div id="confirmPinError" class="error-message text-danger"></div>
+                </div>
+                
+            </div>
+            <div class="row mt-3 pt-2 d-flex justify-content-center">
+                <input class="col-3 submitBtn btn btn-lg" type="submit"
+                    style="background-color: #ff2f68 !important; outline: none; border: none; color: #fff;" value="Submit" />
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById("userRegistrationForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const gender = document.getElementById('gender').value.trim();
+            const profileFor = document.getElementById('profileFor').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const dateOfBirth = document.getElementById('dateOfBirth').value.trim();
+            const maritalStatus = document.getElementById('maritalStatus').value.trim();
+            const religion = document.getElementById('religion').value.trim();
+            const noOfChild = document.getElementById('noOfChild').value.trim();
+            const livingWithChild = document.getElementById('livingWithChild').value.trim();
+            const pin = document.getElementById('pin').value;
+            const confirmPin = document.getElementById('confirmPin').value;
+
+            const confirmPinError = document.getElementById('confirmPinError'); // Error element reference
+
+            // Clear any previous error message
+            confirmPinError.textContent = '';
+
+            // Validate inputs
+            if (pin !== confirmPin) {
+                document.getElementById('confirmPinError').textContent = 'PIN & Confirm PIN does not match';
+                return;
+            }
+
+            try {
+                // Display loading animation
+                Swal.fire({
+                    title: "Loading...",
+                    icon: "info",
+                    html: 'Sending data to server',
+                    showConfirmButton: false
+                });
+
+                const formData = new FormData(this);
+                const formObject = {};
+                formData.forEach(function (value, key) {
+                    formObject[key] = value;
+                });
+                // Proceed with form submission
+                const response = await fetch('/api/user-registration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formObject)
+                });
+
+                const data = await response.json();
+
+                // Close the loading animation
+                Swal.close();
+
+                // Check if the response indicates success
+                if (data.message === "Data sent successfully.") {
+                    // Display success message using SweetAlert
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        text: "User Added  Successfully.",
+                        timer: 3000,
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#3dc944",
+                        didClose: () => {
+                            // Clear the form after success message
+                            this.reset();
+                        }
+                    })
+                } else {
+                    // Display error message using SweetAlert
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: data.message,
+                        confirmButtonColor: "#d33",
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+                // Close the loading animation
+                Swal.close();
+                // Display error message using SweetAlert
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Something went wrong. Please try again later.",
+                    confirmButtonColor: "#d33",
+                });
+            }
+        });
+
+
+        // Fetching dropdowns 
+        populateDropdowns();
+    </script>
+</body>
+
+</html>

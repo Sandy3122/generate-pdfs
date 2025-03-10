@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Kyc Document Name:</span>
+                </div>
+                <div class="col-7">
+                    <span id="kycDocumentName" class="p-0 textCapitalize"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Document Front Url:</span>
+                </div>
+                <div class="col-7">
+                    <a href="#" target="_blank" id="kycDocumentFrontUrl">View Front Doc</a>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Document Back Url:</span>
+                </div>
+                <div class="col-7">
+                    <a href="#" target="_blank" id="kycDocumentBackUrl">View Back Doc</a>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Front Doc Uploaded At:</span>
+                </div>
+                <div class="col-7">
+                    Id: <span id="kycFrontDocUploadedById" class="spanStrong"></span>; Name: <span
+                        id="kycFrontDocUploadedByName" class="spanStrong"></span>; Date: <span id="kycFrontDocDate" class="spanStrong"></span>.
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Back Doc Uploaded At:</span>
+                </div>
+                <div class="col-7">
+                    Id: <span id="kycBackDocUploadedById" class="spanStrong"></span>; Name: <span
+                        id="kycBackDocUploadedByName" class="spanStrong"></span>; Date: <span id="kycBackDocDate"
+                        class="spanStrong"></span>.
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-4 col-md-4 col-5">
+                    <span class="spanField">Kyc Verified By:</span>
+                </div>
+                <div class="col-7">
+                    Id: <span id="kycVerifiedById" class="spanStrong"></span>; Name: <span id="kycVerifiedByName"
+                        class="spanStrong"></span>; Status: <span id="kycVerificationStatusSpan" class="spanStrong"></span>; Date: <span id="kycVerifiedDate" class="spanStrong"></span>.
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-4 col-lg-4">
+                    <span class="spanField">Verification Status:</span>
+                </div>
+                <div class="col-lg-4 col-4">
+                    <select data-dropdown="kycVerificationStatus" id="kycVerificationStatus" class="form-select">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-2">
+                    <button type="button" class="btn btn-sm btn-warning"
+                        id="updateKycVerificationStatus">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    // Call fetchUserData function with userId, userRole, inputIds
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var userId = urlParams.get('userId');
+    // console.log('userId :', userId)
+
+    
+    var inputIds = ['kycDocumentName', 'kycDocumentFrontUrl', 'kycDocumentBackUrl', "kycVerificationStatus", 'kycVerificationStatusSpan'];
+
+    // Define field mappings                                                     
+    const fieldMappings = [
+        { inputId: 'kycVerificationStatus', fieldPath: 'kyc.kycVerificationStatus' },
+    ];
+
+    // Function to populate user data to elements
+    function populateDropDownData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+            if (inputElement.tagName.toLowerCase() === 'select') {
+                setSelectedOption(inputId, value);
+            } else {
+                changeInputValue(inputId, value);
+            }
+        });
+    }
+
+    // Event listener for the Save Changes button for kyc
+    document.getElementById('updateKycVerificationStatus').addEventListener('click', async function () {
+        // Construct the updated data object dynamically
+        const sessionData = await fetchSessionData();
+        // console.log('sessionData: ', sessionData)
+
+        const updatedData = {};
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+
+        // Update kycVerifiedBy field with session information and timestamp
+        const timeStamp =  new Date().toString();;
+        updatedData['kyc.kycVerifiedBy'] = `${sessionData.name}/${sessionData.id}/${timeStamp}`;
+
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        setInnerHTMLById("kycDocumentName", userData.kyc.kycDocumentType || "null");
+        setHrefById("kycDocumentFrontUrl", userData.kyc.kycDocumentFrontUrl || "");
+        setHrefById("kycDocumentBackUrl", userData.kyc.kycDocumentBackUrl || "");
+
+        const kycFrontDocUploadedAt = userData.kyc.kycFrontDocUploadedBy;
+        const kycBackDocUploadedAt = userData.kyc.kycBackDocUploadedBy;
+        const kycVerifiedAt = userData.kyc.kycVerifiedBy;
+        const [kycFrontDocUploadedByName, kycFrontDocUploadedById, kycFrontDocUploadedDateTime] = kycFrontDocUploadedAt.split('/');
+        const [kycBackDocUploadedByName, kycBackDocUploadedById, kycBackDocUploadedDateTime] = kycBackDocUploadedAt.split('/');
+        const [kycVerifiedByName, kycVerifiedById, kycVerifiedDateTime] = kycVerifiedAt.split('/');
+
+        // console.log(kycFrontDocUploadedByName, kycFrontDocUploadedById, kycFrontDocUploadedDateTime)
+        // console.log('kycVerifiedByName, kycVerifiedById, kycVerifiedDateTime: ', kycVerifiedByName, kycVerifiedById, kycVerifiedDateTime)
+
+        setInnerHTMLById("kycFrontDocUploadedById", kycFrontDocUploadedById || '--');
+        setInnerHTMLById("kycFrontDocUploadedByName", kycFrontDocUploadedByName || '--');
+        setInnerHTMLById("kycFrontDocDate", kycFrontDocUploadedDateTime ? formatDateTime(kycFrontDocUploadedDateTime) : '--');
+
+        setInnerHTMLById("kycBackDocUploadedById", kycBackDocUploadedById || '--');
+        setInnerHTMLById("kycBackDocUploadedByName", kycBackDocUploadedByName || '--');
+        setInnerHTMLById("kycBackDocDate", kycBackDocUploadedDateTime ? formatDateTime(kycBackDocUploadedDateTime) : '--');
+
+        setInnerHTMLById("kycVerifiedById", kycVerifiedById || '--');
+        setInnerHTMLById("kycVerifiedByName", kycVerifiedByName || '--');
+        setInnerHTMLById("kycVerifiedDate", kycVerifiedDateTime ? formatDateTime(kycVerifiedDateTime) : '--');
+        setInnerHTMLByIdWithColor("kycVerificationStatusSpan", userData.kyc.kycVerificationStatus || 'pending');
+        setSelectedOption("kycVerificationStatus", userData.kyc.kycVerificationStatus || 'pending');
+    }
+
+    // fetch user data and dropdowns;
+    populateDropDownsAndFetchUserData(userId);
+</script>
+
+</html>

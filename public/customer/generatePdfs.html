@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate PDFs</title>
+  <script src="/js/customer/allScripts.js"></script>
+
+  <!-- DataTables CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+  <style>
+    .progress {
+      background-color: #f8f9fa;
+      border-radius: 0.25rem;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease;
+      min-width: 2em;
+    }
+
+    #progressText {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+
+  <!-- Add these in the head section -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid mt-1">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Generate PDFs</h3>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <button class="btn btn-primary" id="generateAllPdfsBtn">Generate All PDFs</button>
+          <div style="width: 300px;">
+            <select id="filterableColumns" class="form-select" multiple>
+              <option value="4">State</option>
+              <option value="5">Gender</option>
+              <option value="6">Verification Status</option>
+              <option value="1">Name</option>
+              <option value="2">Phone Number</option>
+              <option value="3">Email</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive vh-100">
+          <table id="pdfDataTable" class="table table-bordered">
+            <thead class="table-dark">
+              <tr class="text-center">
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>State</th>
+                <th>Gender</th>
+                <th>Verification Status</th>
+                <th>Created By Id</th>
+                <th>Created By Name</th>
+                <th>Created Date (MM-DD-YYYY)</th>
+                <th>Generate PDF</th>
+              </tr>
+            </thead>
+            <tbody id="pdfData">
+              <!-- User details will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Include SearchPanes CSS & JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.bootstrap5.min.css">
+
+<script src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+
+<script>
+  // Add this before initializeDataTable function
+  let dataTable;
+
+  async function initializeDataTable() {
+    // Ensure DataTable is only initialized once
+    if ($.fn.DataTable.isDataTable("#pdfDataTable")) {
+      $("#pdfDataTable").DataTable().destroy();
+    }
+
+    const selectedColumns = $('#filterableColumns').val() ? 
+      Array.from(document.getElementById('filterableColumns').selectedOptions).map(option => parseInt(option.value)) :
+      [4, 5]; // Default to State (4) and Gender (5) columns if nothing is selected
+    
+    console.log('selectedColumns: ', selectedColumns)
+    dataTable = $("#pdfDataTable").DataTable({
+      responsive: true,
+      searchPanes: {
+        cascadePanes: true,
+        columns: selectedColumns
+      },
+      dom: "Plfrtip",
+      columnDefs: [
+        { searchPanes: { show: true }, targets: selectedColumns },
+        { orderable: false, targets: [10] }
+      ]
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize multiple select with Bootstrap Select
+    $('#filterableColumns').select2({
+      placeholder: 'Select columns to filter',
+      width: '100%'
+    }).val([4, 5]).trigger('change'); // Pre-select State and Gender options
+
+    // Add event listener for column selection change
+    $('#filterableColumns').on('change', function() {
+      initializeDataTable();
+    });
+  });
+
+  async function fetchAllUserDataForPdf() {
+    try {
+      const userData = await fetchAllUserData();
+      const pdfDataContainer = document.getElementById("pdfData");
+
+      // Clear existing data
+      pdfDataContainer.innerHTML = "";
+
+      userData.forEach(user => {
+        const row = document.createElement("tr");
+        row.classList.add("text-center");
+        const accountData = String(user.data.accountCreatedBy);
+        const [accountCreatedByName, accountCreatedById, accountCreatedByMobileNumber, accountCreatedDateTime] = accountData.split('/');
+
+        row.innerHTML = `
+          <td>${user.id || ""}</td>
+          <td class="textCapitalize">${user.data.firstName || ""} ${user.data.lastName || ""}</td>
+          <td>${user.data.registeredMobileNumber || ""}</td>
+          <td>${user.data.email || ""}</td>
+          <td>${user.data.currentAddress.currentState || ""}</td>
+          <td>${user.data.gender || ""}</td>
+          <td class="textCapitalize">${user.data.accountVerificationStatus || ""}</td>
+          <td class="textCapitalize">${accountCreatedById || ""}</td>
+          <td class="textCapitalize">${accountCreatedByName || ""}</td>
+          <td>${formatDateTime(accountCreatedDateTime) || ""}</td>
+          <td>
+            <button class="btn btn-success btn-sm" onclick="generatePdf('${user.id}')">Generate PDF</button>
+          </td>
+        `;
+        pdfDataContainer.appendChild(row);
+      });
+
+      // Initialize DataTable after populating data
+      initializeDataTable();
+
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error fetching user data. Please try again later.',
+      });
+    }
+  }
+
+  // Load user data and apply filtering
+  fetchAllUserDataForPdf();
+</script>
+
+  <script>
+    // async function fetchAllUserDataForPdf() {
+    //   try {
+    //     const userData = await fetchAllUserData();
+    //     const pdfDataContainer = document.getElementById("pdfData");
+
+    //     // Clear existing data
+    //     pdfDataContainer.innerHTML = "";
+
+    //     userData.forEach(user => {
+    //       const row = document.createElement("tr");
+    //       row.classList.add("text-center");
+    //       const accountData = String(user.data.accountCreatedBy);
+    //       const [accountCreatedByName, accountCreatedById, accountCreatedByMobileNumber, accountCreatedDateTime] = accountData.split('/');
+
+    //       // Populate table row
+    //       row.innerHTML = `
+    //         <td>${user.id || ""}</td>
+    //         <td class="textCapitalize">${user.data.firstName || ""} ${user.data.lastName || ""}</td>
+    //         <td>${user.data.registeredMobileNumber || ""}</td>
+    //         <td>${user.data.email || ""}</td>
+    //         <td>${user.data.currentAddress.currentState || ""}</td>
+    //         <td>${user.data.gender || ""}</td>
+    //         <td class="textCapitalize">${user.data.accountVerificationStatus || ""}</td>
+    //         <td class="textCapitalize">${accountCreatedById || ""}</td>
+    //         <td class="textCapitalize">${accountCreatedByName || ""}</td>
+    //         <td>${formatDateTime(accountCreatedDateTime) || ""}</td>
+    //         <td>
+    //           <button class="btn btn-success btn-sm" onclick="generatePdf('${user.id}')">Generate PDF</button>
+    //         </td>
+    //       `;
+    //       pdfDataContainer.appendChild(row);
+    //     });
+    //   } catch (error) {
+    //     console.error("Error fetching user data:", error);
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Error',
+    //       text: 'Error fetching user data. Please try again later.',
+    //     });
+    //   }
+    // }
+
+    function downloadPdf(downloadUrl, fileName) {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Close the SweetAlert
+      Swal.close();
+    }
+
+    function viewPdf(downloadUrl) {
+      window.open(downloadUrl, '_blank');
+    }
+
+
+    async function generatePdf(documentId = null) {
+      try {
+        const url = documentId
+          ? `/api/generateProfilesPdf/${documentId}`
+          : `/api/generateProfilesPdf`;
+
+        const confirmation = await Swal.fire({
+          title: 'Are you sure?',
+          text: documentId
+            ? `Generate PDF for user ID: ${documentId}?`
+            : 'Generate PDFs for all users?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, generate',
+        });
+
+        if (confirmation.isConfirmed) {
+          let timerInterval;
+          let progress = 0;
+
+          Swal.fire({
+            title: 'Generating PDF...',
+            html: `
+          <div class="progress" style="height: 20px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" 
+                 style="width: 0%" 
+                 id="pdfProgress">0%</div>
+          </div>
+          <div class="mt-2" id="progressText">Initializing...</div>
+        `,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+              const progressBar = Swal.getHtmlContainer().querySelector('#pdfProgress');
+              const progressText = Swal.getHtmlContainer().querySelector('#progressText');
+
+              timerInterval = setInterval(() => {
+                if (progress < 90) {
+                  progress += Math.random() * 15;
+                  progress = Math.min(progress, 90);
+                  progressBar.style.width = `${progress}%`;
+                  progressBar.textContent = `${Math.round(progress)}%`;
+
+                  if (progress < 30) {
+                    progressText.textContent = 'Collecting user data...';
+                  } else if (progress < 60) {
+                    progressText.textContent = 'Generating PDF content...';
+                  } else {
+                    progressText.textContent = 'Finalizing document...';
+                  }
+                }
+              }, 500);
+            }
+          });
+
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/pdf',
+            },
+          });
+
+          if (!response.ok) {
+            clearInterval(timerInterval);
+            throw new Error(`Failed to generate PDF: ${response.statusText}`);
+          }
+
+          const blob = await response.blob();
+          const fileName = documentId ? `profile_${documentId}.pdf` : 'all_profiles.pdf';
+          const downloadUrl = window.URL.createObjectURL(blob);
+
+          clearInterval(timerInterval);
+
+          const progressBar = Swal.getHtmlContainer().querySelector('#pdfProgress');
+          const progressText = Swal.getHtmlContainer().querySelector('#progressText');
+          progressBar.style.width = '100%';
+          progressBar.textContent = '100%';
+          progressText.textContent = 'PDF Generated Successfully!';
+
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          Swal.fire({
+            icon: 'success',
+            title: 'PDF Generated Successfully',
+            html: `
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-success" onclick="downloadPdf('${downloadUrl}', '${fileName}')">Download</button>
+            <button class="btn btn-info" onclick="viewPdf('${downloadUrl}')">View</button>
+          </div>
+        `,
+            showConfirmButton: false
+          });
+        }
+      } catch (error) {
+        console.error("Error generating PDF(s):", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to generate PDF(s). Please try again.',
+        });
+      }
+    }
+
+
+    // fetchAllUserDataForPdf();
+
+    // Event listener for generating all PDFs
+    document.getElementById("generateAllPdfsBtn").addEventListener("click", () => generatePdf());
+  </script>
+</body>
+
+</html>

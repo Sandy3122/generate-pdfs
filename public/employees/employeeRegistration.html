@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://i.postimg.cc/W1qxgjkZ/logo.jpg"
+    />
+    <title>Employee Registration Form</title>
+    <style>
+      .gradient-custom {
+        box-shadow: 3px 0px 30px 18px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+      }
+
+      .card-registration .select-arrow {
+        top: 13px;
+      }
+
+      .submitBtn {
+        background-color: #ff2f68 !important;
+        outline: none;
+        border: none;
+      }
+
+      .submitBtn:hover {
+        background-color: #45a !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="bg-light vh-100 gradient-custom">
+      <div class="container-fluid pt-2 pb-2 h-100">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-12 col-md-12 col-lg-12 col-xl-8">
+            <div
+              class="mb-1 card shadow-2-strong card-registration"
+              style="border-radius: 15px"
+            >
+              <div class="card-body">
+                <h2
+                  class="pb-12 pb-md-0 display-5 text-start fw-bolder"
+                  style="color: #ff2f68"
+                >
+                  Employee Registration
+                </h2>
+                <form
+                  id="employeeRegistrationForm"
+                  action="/api/employee-registration"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 col-lg-6 mb-3">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="text"
+                          id="firstName"
+                          class="form-control form-control-lg"
+                          name="firstName"
+                          required
+                        />
+                        <label class="form-label" for="firstName"
+                          >First Name</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 mb-3">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="text"
+                          id="lastName"
+                          class="form-control form-control-lg"
+                          name="lastName"
+                          required
+                        />
+                        <label class="form-label" for="lastName"
+                          >Last Name</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 mb-3">
+                      <h6 class="mb-2">Gender:</h6>
+
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="femaleGender"
+                          value="female"
+                        />
+                        <label class="form-check-label" for="femaleGender"
+                          >Female</label
+                        >
+                      </div>
+
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="maleGender"
+                          value="male"
+                        />
+                        <label class="form-check-label" for="maleGender"
+                          >Male</label
+                        >
+                      </div>
+
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="otherGender"
+                          value="others"
+                        />
+                        <label class="form-check-label" for="otherGender"
+                          >Other</label
+                        >
+                      </div>
+                    </div>
+
+                    <div
+                      class="col-md-6 col-sm-6 mb-3 d-flex align-items-center"
+                    >
+                      <div>
+                        <h6 class="mb-2">Marital Status:</h6>
+
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="maritalStatus"
+                            id="maritalStatusYes"
+                            value="married"
+                          />
+                          <label class="form-check-label" for="maritalStatusYes"
+                            >Yes</label
+                          >
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="maritalStatus"
+                            id="maritalStatusNo"
+                            value="unmarried"
+                          />
+                          <label class="form-check-label" for="maritalStatusNo"
+                            >No</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div
+                        data-mdb-input-init
+                        class="form-outline datepicker w-100"
+                      >
+                        <input
+                          type="date"
+                          class="form-control form-control-lg"
+                          name="dateOfBirth"
+                          id="dateOfBirth"
+                          required
+                        />
+                        <label for="dateOfBirth" class="form-label"
+                          >Date Of Birth</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          class="form-control form-control-lg"
+                          required
+                        />
+                        <label class="form-label" for="email">Email</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="tel"
+                          id="phoneNumber"
+                          name="phoneNumber"
+                          class="form-control form-control-lg"
+                          oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                          maxlength="10"
+                          pattern="[0-9]{10}"
+                          required
+                          autocomplete="off"
+                        />
+                        <label class="form-label" for="phoneNumber"
+                          >Phone Number</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="tel"
+                          id="emergencyPhoneNumber"
+                          class="form-control form-control-lg"
+                          name="emergencyPhoneNumber"
+                          oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                          maxlength="10"
+                          pattern="[0-9]{10}"
+                          required
+                          autocomplete="off"
+                        />
+                        <label class="form-label" for="emergencyPhoneNumber"
+                          >Emergency Phone Number</label
+                        >
+                      </div>
+                      <div
+                        id="duplicateNumberError"
+                        class="error-message text-danger"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="password"
+                          id="pin"
+                          class="form-control form-control-lg"
+                          name="pin"
+                          required
+                          maxlength="4"
+                          pattern="[0-9]{4}"
+                        />
+                        <label class="form-label" for="pin">4 Digit Pin</label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                      <div data-mdb-input-init class="form-outline">
+                        <input
+                          type="password"
+                          id="confirmPin"
+                          class="form-control form-control-lg"
+                          name="confirmPin"
+                          required
+                          maxlength="4"
+                          pattern="[0-9]{4}"
+                        />
+                        <label class="form-label" for="confirmPin"
+                          >Confirm 4 Digit Pin</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <select
+                        class="form-select"
+                        name="kycDocumentType"
+                        id="exampleFormControlSelect1"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          Select KYC Document
+                        </option>
+                        <option value="aadhar_card">Aadhar Card</option>
+                        <option value="pan_card">Pan Card</option>
+                        <option value="driving_license">Driving License</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row pt-2">
+                    <div class="col-sm-4 pt-2">
+                      <label class="form-label" for="kycDocument"
+                        >Upload KYC Document</label
+                      >
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="kycDocument"
+                        name="kycDocument"
+                        accept="application/pdf"
+                        required
+                      />
+                      <small id="kycDocumentError" class="text-danger"></small>
+                      <!-- Error container -->
+                    </div>
+
+                    <div class="col-sm-4 pt-2">
+                      <label class="form-label" for="profilePic"
+                        >Upload Profile Pic</label
+                      >
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="profilePic"
+                        name="employeePhoto"
+                        accept="image/jpeg, image/jpg"
+                        required
+                      />
+                      <small id="profilePicError" class="text-danger"></small>
+                      <!-- Error container -->
+                    </div>
+
+                    <div class="col-sm-4 pt-2">
+                      <label class="form-label" for="resume"
+                        >Upload Resume</label
+                      >
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="resume"
+                        name="employeeResume"
+                        accept="application/pdf"
+                        required
+                      />
+                      <small id="resumeError" class="text-danger"></small>
+                      <!-- Error container -->
+                    </div>
+                  </div>
+
+                  <div class="row mt-3 pt-2 d-flex justify-content-center">
+                    <input
+                      class="col-6 submitBtn btn btn-primary btn-lg"
+                      type="submit"
+                      value="Submit"
+                    />
+                  </div>
+
+                  <div class="row text-center d-flex mt-2">
+                    <span
+                      >Already have an account?
+                      <a
+                        href="/login"
+                        style="color: #ff2f68"
+                        class="text-decoration-none text-truncate"
+                        >Log in</a
+                      ></span
+                    >
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <!-- BootStrap CDN -->
+  <!-- MDB -->
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"
+  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.20.0/pdf-lib.min.js"></script>
+
+  <script>
+    document
+      .getElementById("employeeRegistrationForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const phoneNumber = document.getElementById("phoneNumber").value.trim();
+        const emergencyPhoneNumber = document
+          .getElementById("emergencyPhoneNumber")
+          .value.trim();
+        const duplicateNumberError = document.getElementById(
+          "duplicateNumberError"
+        );
+
+        // Clear previous error message
+        duplicateNumberError.textContent = "";
+
+        // Validate inputs
+        if (phoneNumber === emergencyPhoneNumber) {
+          duplicateNumberError.textContent =
+            "Phone Number and Emergency Phone Number should not be the same";
+          return;
+        }
+
+        Swal.fire({
+          title: "Please wait...",
+          html: "Sending data to server",
+          allowOutsideClick: false,
+          showConfirmButton: false, // This hides the OK button
+          willOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        const formData = new FormData(this);
+
+        fetch("/api/employee-registration", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Close the loading animation
+            Swal.close();
+            // Check if the response indicates success
+            if (response.ok) {
+              // If the response status is in the 200–299 range
+              return response.json().then((data) => {
+                Swal.fire({
+                  icon: "success",
+                  title: "Success!",
+                  text: "Form submitted successfully.",
+                  confirmButtonColor: "#3dc944",
+                }).then(() => {
+                  // Clear form fields or redirect to another page
+                  window.location.href = "/login";
+                });
+              });
+            } else {
+              return response.json().then((data) => {
+                throw new Error(data.message || "Form submission failed");
+              });
+            }
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: error.message || "An unexpected error occurred",
+              confirmButtonColor: "#d33",
+            });
+            console.error("Error submitting form:", error);
+          });
+      });
+
+    // Define maximum allowed file sizes (in bytes)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 4 MB
+
+    document
+      .getElementById("kycDocument")
+      .addEventListener("change", function () {
+        validateFile(
+          this,
+          "kycDocumentError",
+          ["application/pdf"],
+          MAX_FILE_SIZE
+        );
+      });
+
+    document
+      .getElementById("profilePic")
+      .addEventListener("change", function () {
+        validateFile(
+          this,
+          "profilePicError",
+          ["image/jpeg", "image/jpg"],
+          MAX_FILE_SIZE
+        );
+      });
+
+    document.getElementById("resume").addEventListener("change", function () {
+      validateFile(this, "resumeError", ["application/pdf"], MAX_FILE_SIZE);
+    });
+
+    function validateFile(input, errorElementId, allowedTypes, maxSize) {
+      const file = input.files[0];
+      const errorElement = document.getElementById(errorElementId);
+
+      // Clear previous error message
+      errorElement.textContent = "";
+
+      if (file) {
+        // Check file type
+        if (!allowedTypes.includes(file.type)) {
+          errorElement.textContent = `Invalid file type. Allowed types: ${allowedTypes.join(", ")}.`;
+          input.value = "";
+        }
+        // Check file size
+        else if (file.size > maxSize) {
+          errorElement.textContent = `File size limit exceeded (max ${maxSize / (1024 * 1024)}MB).`;
+          input.value = "";
+        }
+      }
+    }
+
+    // Optional: Prevent form submission if any file validation fails
+    document
+      .querySelector(".submitBtn")
+      .addEventListener("click", function (event) {
+        if (
+          document.getElementById("kycDocument").value === "" ||
+          document.getElementById("profilePic").value === "" ||
+          document.getElementById("resume").value === ""
+        ) {
+          event.preventDefault(); // Prevent form submission if any validation fails
+        }
+      });
+  </script>
+</html>

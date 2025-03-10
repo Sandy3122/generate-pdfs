@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Details</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Profile For:</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <input type="text" id="profileFor" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">About Me:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <!-- <input type="text" id="aboutMe" class="form-control" value="" disabled> -->
+                            <textarea name="" id="aboutMeDescription" class="form-control" cols="30" rows="3" value="" disabled></textarea>
+                            <div class="word-count" style="font-size: 12px; margin-top: 4px;">Word Count: <span id="wordCount">0</span>, <span style="float: right;">Recommened 190 words</span></div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Age:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <span id="age"></span>
+                            <!-- <input type="text" id="age" class="form-control" value="" disabled> -->
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Height:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <!-- <input type="text" id="height" class="form-control" value="" disabled> -->
+                            <select data-dropdown="height" id="height" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Body Type:</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <select data-dropdown="bodyType" id="bodyType" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Diet:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <select data-dropdown="diet" id="diet" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Drink:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <select data-dropdown="drink" id="drink" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Smoke:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <select data-dropdown="smoke" id="smoke" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Language:</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <select data-dropdown="language" id="languagesKnown" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Any Disability:</span>
+                        </div>
+                        <div class="col-lg-6 col-4">
+                            <!-- <select data-dropdown="anyDisability" id="anyDisability" class="form-select" disabled></select> -->
+                            <select data-dropdown="anyDisability" id="anyDisability" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div id="disabilityDetailsContainer" style="display: none;">
+                        <div class="row mb-2">
+                            <div class="col-4 col-lg-4">
+                                <span class="spanField">Disability Details:</span>
+                            </div>
+                            <div class="col-lg-6 col-4">
+                                <textarea name="" id="disabilityDetails" class="form-control" cols="30" rows="3" value="" disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        if (userData.aboutMeDescription) {
+            // Convert literal \n strings to actual line breaks
+            const formattedText = userData.aboutMeDescription.replace(/\\n/g, '\n');
+            document.getElementById("aboutMeDescription").value = formattedText;
+            
+            // Update word count after setting the value
+            const words = formattedText.split(/\s+/).filter(word => word.length > 0);
+            const wordCountDisplay = document.getElementById("wordCount");
+            wordCountDisplay.textContent = words.length;
+            wordCountDisplay.style.color = words.length <= 190 ? "green" : "red";
+        }
+
+        changeInputValue("profileFor", capitalizeWords(userData.profileFor) || "null");
+        // changeInputValue("aboutMeDescription", capitalizeWords(userData.aboutMeDescription) || "null");
+        setInnerHTMLById("age", calculateAge(userData.dateOfBirth) + " Years" || "null");
+        // setInnerHTMLById("age", userData.age || "null");
+        changeInputValue("height", userData.height || "null");
+        setSelectedOption("bodyType", userData.bodyType || "null");
+        setSelectedOption("diet", userData.diet || "null");
+        setSelectedOption("drink", userData.drink || "null");
+        setSelectedOption("smoke", userData.smoke || "null");
+        setSelectedOption("languagesKnown", userData.languagesKnown || "null");
+        changeInputValue("anyDisability", userData.anyDisability || "null");
+        changeInputValue("disabilityDetails", userData.disabilityDescription || "null");
+
+        // Show or hide the Disability Details section based on anyDisability value
+        updateDisabilityDetailsVisibility(userData.anyDisability || "null");
+
+        // Update the word count for About Me after populating
+        const aboutMeText = document.getElementById("aboutMeDescription").value.trim();
+        const words = aboutMeText.length > 0 ? aboutMeText.split(/\s+/) : [];
+        const wordCountDisplay = document.getElementById("wordCount");
+        
+        // Check word count and apply color
+        if (words.length <= 190) {
+            wordCountDisplay.style.color = "green";
+        } else {
+            wordCountDisplay.style.color = "red";
+        }
+    
+        // Update the word count
+        wordCountDisplay.textContent = words.length;
+    }
+
+    // Function to handle dropdown change
+    function handleDropdownChange() {
+        const anyDisability = document.getElementById('anyDisability').value;
+        updateDisabilityDetailsVisibility(anyDisability);
+    }
+
+    // Function to update the visibility of the Disability Details section
+    function updateDisabilityDetailsVisibility(anyDisability) {
+        const disabilityDetailsContainer = document.getElementById('disabilityDetailsContainer');
+        if (anyDisability === 'yes') {
+            disabilityDetailsContainer.style.display = 'block';
+        } else {
+            disabilityDetailsContainer.style.display = 'none';
+        }
+    }
+
+    // Call fetchUserData function with userId, userRole, inputIds
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+
+    const inputIds = ['profileFor', 'aboutMeDescription', 'height', 'bodyType', 'diet', 'drink', 'smoke', 'languagesKnown', 'anyDisability', 'disabilityDetails'];
+
+    populateDropDownsAndFetchUserData(userId)
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+        // Construct the updated data object
+        const updatedData = {};
+        inputIds.forEach(inputId => {
+            if (inputId === 'aboutMeDescription') {
+                const content = document.getElementById(inputId).value;
+                
+                // Explicitly encode line breaks
+                const encodedContent = content.split('\n').join('\\n');
+                
+                updatedData[inputId] = encodedContent;
+            } else {
+                updatedData[inputId] = document.getElementById(inputId).value;
+            }
+        });
+
+        console.log('Final data being sent:', updatedData);
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+    // Add event listener to handle anyDisability dropdown change
+    document.getElementById('anyDisability').addEventListener('change', handleDropdownChange);
+
+    // Initial call to handleDropdownChange to set the correct initial state
+    handleDropdownChange();
+</script>
+<script>
+    const textBox = document.getElementById('aboutMeDescription');
+    const wordCountDisplay = document.getElementById('wordCount');
+  
+    textBox.addEventListener('input', () => {
+      const text = textBox.value.trim();
+      const words = text.length > 0 ? text.split(/\s+/) : [];
+  
+      // Check word count and apply color
+      if (words.length <= 190) {
+        wordCountDisplay.style.color = "green";
+      } else if (words.length > 190) {
+        wordCountDisplay.style.color = "red";
+      }
+  
+      // Update the word count
+      wordCountDisplay.textContent = words.length;
+    });
+  </script>
+
+</html>

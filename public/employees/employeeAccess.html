@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Details</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+  <style>
+    /* Custom scrollbar styles */
+    ::-webkit-scrollbar {
+      width: 6px; /* Setting the width of the scrollbar */
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; /* Setting the background color of the track */
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888; /* Setting the color of the scrollbar thumb */
+      border-radius: 5px; /* Setting the border radius of the scrollbar thumb */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555; /* Setting the color of the scrollbar thumb on hover */
+    }
+
+    .status-active {
+      color: green !important;
+    }
+
+    .status-inactive {
+      color: red !important;
+    }
+
+    body {
+      background-color: #f8f9fa; /* Setting a light background color */
+    }
+
+    .container-fluid {
+      padding-top: 30px; /* Adding some padding to the top */
+    }
+
+    .table {
+      background-color: #fff; /* Setting a white background for the table */
+    }
+
+    .table thead th {
+      border-bottom: none; /* Removing border-bottom for table header */
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid #dee2e6; /* Adding a bottom border for table rows */
+    }
+
+
+
+    .table-bordered th,
+    .table-bordered td {
+      border: none; /* Removing borders for table cells */
+    }
+
+    .table-bordered {
+      border: none; /* Removing border for the table itself */
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <h2 class="pb-2 pb-md-0 mb-4 display-5 text-center fw-bolder" style="color: #ff2f68;">
+      Employee Details</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-secondary">
+          <tr>
+            <th>Employee ID</th>
+            <th>DOB</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Marital Status</th>
+            <th>Role</th>
+            <th>Designation</th>
+            <th>Account Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+          <!-- Employee details will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (optional if you require dropdowns, modals, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/employeeStatusUpdate.js"></script>
+</body>
+</html>

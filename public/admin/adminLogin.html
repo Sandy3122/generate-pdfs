@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+    <title>Admin Login</title>
+    <style>
+        .gradient-custom {
+            box-shadow: 3px 0px 30px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-login .select-input.form-control[readonly]:not([disabled]) {
+            font-size: 1rem;
+            line-height: 2.15;
+            padding-left: .75em;
+            padding-right: .75em;
+        }
+
+        .card-login .select-arrow {
+            top: 13px;
+        }
+
+        .submitBtn {
+            background-color: #ff2f68 !important;
+            outline: none;
+            border: none;
+        }
+
+        .submitBtn:hover {
+            background-color: #45a !important;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="bg-light vh-100 gradient-custom">
+        <div class="container pt-4 pb-4 h-100 d-flex justify-content-center align-items-center"> <!-- Center the form -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-2 card shadow-2-strong card-login" style="border-radius: 15px;">
+                        <div class="card-body">
+                            <h2 class="pb-2 pb-md-0 display-5 text-start fw-bolder" style="color: #ff2f68;">
+                                Admin Login</h2>
+                            <form action="/api/admin-login" method="POST" id="adminLoginForm" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-12 p-4">
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="tel" id="phoneNumber" name="adminPhoneNumber"
+                                                class="form-control form-control-lg"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
+                                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 p-4">
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="password" id="pin" class="form-control form-control-lg"
+                                                name="pin" required maxlength="4"
+                                                pattern="[0-9]{4}" />
+                                            <label class="form-label" for="pin">4 Digit Pin</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12 px-4 pb-4">
+                                            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                                    </div>
+                                </div>
+
+                                <div class="row d-flex justify-content-center">
+                                    <input class="col-6 submitBtn btn btn-primary btn-lg" type="submit"
+                                        value="Submit" />
+                                </div>
+
+                                <div class="row text-center d-flex mt-3">
+                                    <span><a href="/forgetPassword" class="text-decoration-none text-truncate link">Forget Password</a></span>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- BootStrap CDN -->
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.20.0/pdf-lib.min.js"></script>
+<!-- <script src="/js/admin/adminFormHandling.js"></script> -->
+
+<script>
+    // Handle login form submission
+document.getElementById("adminLoginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const pin = document.getElementById("pin").value;
+    // const rememberMe = document.getElementById("rememberMe").checked; // Get the state of the checkbox
+
+    try {
+        const response = await fetch("/api/admin-login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ phoneNumber: phoneNumber, pin: pin }) // Include rememberMe in the request body
+        });
+
+        const data = await response.json();
+        // console.log("Admin Data: ", data)
+
+        if (response.ok) {
+            // Success
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Successful',
+                text: data.message,
+                confirmButtonColor: "#3dc944",
+            }).then(() => {
+                // Redirect or perform any other action after successful login
+                window.location.href = "/admin/dashboard";
+            });
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('role', data.role);
+        } else {
+            // Error
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: data.message,
+                confirmButtonColor: "#d33",
+            });
+        }
+    } catch (error) {
+        console.error('Error logging in:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while processing your request. Please try again later.',
+            confirmButtonColor: "#d33",
+        });
+    }
+});
+</script>
+<!-- <script>
+    // Function to check token and role from localStorage and redirect accordingly
+    function checkAuthAndRedirect(roleRequired, redirectPath) {
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+
+        if (token && role === roleRequired) {
+            // Token and role match, redirect to the specified path
+            window.location.href = redirectPath;
+        }
+    }
+
+    // Check for the token and role when the admin login page loads
+    document.addEventListener("DOMContentLoaded", () => {
+        // Check if the user is on the admin login page
+        if (window.location.pathname === '/login') {
+            const allowedRoles = ['admin', 'superAdmin'];
+            checkAuthAndRedirect(allowedRoles, '/admin/dashboard');
+        }
+    });
+</script> -->
+
+
+</html>

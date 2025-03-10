@@ -1,0 +1,119 @@
+.table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: #b6b6b6 #f1f1f1;
+    overflow-x: auto;
+    overflow-y: none;
+}
+
+table{
+    font-size:small;
+}
+input.search {
+    width: 100%;
+    max-width: 260px;
+    border-radius: 18px;
+    border: none;
+    padding: 2px 6px 4px 40px;
+    background: url("https://uxwing.com/wp-content/themes/uxwing/download/user-interface/search-icon.png") no-repeat 13px;
+    background-size: 14px;
+    background-color: rgb(200, 210, 218);
+}
+input.search:focus{
+    outline: none;
+}
+img{
+    border-radius: 16px;
+    width: 140px;
+    height: 130px;
+    /* display: block; */
+    margin: 0 auto;
+}
+
+p{
+    margin-bottom: 0.4rem !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+}
+/* Hide scrollbar for the table */
+/* ::-webkit-scrollbar{ */
+    /* width: 0 !important; */
+    /* height: 0 !important; */
+    /* background: transparent; */
+/* } */
+
+/* Optional: show position indicator */ */
+/* .table-responsive::-webkit-scrollbar-thumb { */
+    /* background: transparent; */
+/* } */
+
+th {
+    width: auto; /* Adjust the width according to content */
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+    border-style: hidden !important;
+    color: aqua;
+}
+tr{
+    border-radius: 10px !important;
+}
+.table{
+    background-color: rgba(155, 165, 170, 0.3);
+    border-radius: 20px !important;
+    outline: none !important;
+    margin-bottom: 0.4rem !important;
+}
+
+.table>:not(caption) {
+white-space: nowrap;
+border-bottom-width: 0 !important;
+}
+
+th{
+    border-style: none;
+}
+
+/* Customize modal */
+.modal-content {
+  background-color: transparent;
+  border: none; /* Remove border */
+  box-shadow: none; /* Remove shadow */
+}
+
+.modal-dialog {
+  max-width: 50%; /* Adjust modal width */
+}
+
+.modal-header{
+    border-bottom:  0 !important;
+    padding: 0 16px !important;
+    width: 80%;
+}
+#previewImage {
+  width: 60%;
+  height: auto;
+  border-radius: 16px; /* Optional: Add border radius to the image */
+}
+
+th a{
+    text-decoration: none;
+    color: black;
+    font-weight: 0;
+}
+
+.text-white {
+    color: white !important;
+}
+
+
+.highlight {
+    background-color: #ff2f68 !important;
+    border-radius: 4px !important;
+    color: white !important; 
+}
+
+th a .btn{
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+}

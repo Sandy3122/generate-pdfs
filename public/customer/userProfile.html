@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <!-- Rendering all script tags and CDNS -->
+  <script src="/js/customer/allScripts.js"></script>
+  <link rel="stylesheet" href="/css/userProfile.css">
+</head>
+
+<body class="vh-100">
+
+  <div class="container">
+    <div class="searchBar pt-2">
+      <input class="search" type="search" placeholder="Search">
+    </div>
+
+    <div class="profileSection mt-3">
+      <div class="row justify-content-center">
+        <div class="userImage col-6 col-sm-4 col-xs-6 col-lg-2 mb-3 mb-lg-0 text-center">
+          <!-- User Image -->
+          <img src="" id="userProfile" alt="userImage" onclick="showImagePreview(this)">
+        </div>
+        <div class="userData pt-2 col-12 col-sm-8 col-xs-6 col-lg-10">
+          <div class="container justify-content-center text-capitalize">
+            <div class="row">
+              <div class="col-5 col-sm-6">
+                <p><strong class="label">Profile Id:</strong></p>
+              </div>
+              <div class="col-6 col-sm-6">
+                <p><span id="profileIdSpan"></span></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 col-sm-6">
+                <p><strong class="label">Name:</strong></p>
+              </div>
+              <div class="col-6 col-sm-6">
+                <p><span id="nameSpan"></span></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 col-sm-6">
+                <p><strong class="label">KYC Verification Status:</strong></p>
+              </div>
+              <div class="col-6 col-sm-6">
+                <p><span id="kycVerificationStatusSpan"></span></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 col-sm-6">
+                <p><strong class="label">Profile Verification Status:</strong></p>
+              </div>
+              <div class="col-6 col-sm-6">
+                <p><span id="profilrVerificationStatusSpan"></span></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5 col-sm-6">
+                <p><strong class="label">Block/Hide:</strong></p>
+              </div>
+              <div class="col-6 col-sm-6">
+                <p><span id="statusSpan"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="table-responsive mt-3 mb-4">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><a href="/dashboard/profileAdmin"><button class="btn-sm btn">Profile Admin</button></a></th>
+            <th><a href="/dashboard/resetPassword"><button class="btn-sm btn">Reset Pin</button></a></th>
+            <th><a href="/dashboard/profileInfo"><button class="btn-sm btn">Profile Info</button></a></th>
+            <th><a href="/dashboard/mandatoryDetails"><button class="btn-sm btn">Mandatory Details</button></a></th>
+            <th><a href="/dashboard/personalDetails"><button class="btn-sm btn">Personal Details</button></a></th>
+            <th><a href="/dashboard/userKyc"><button class="btn-sm btn">KYC Details</button></a></th>
+            <th><a href="/dashboard/userAddress"><button class="btn-sm btn">Address</button></a></th>
+            <th><a href="/dashboard/userFamilyDetails"><button class="btn-sm btn">Family Details</button></a></th>
+            <th><a href="/dashboard/educationAndWorkDetails"><button class="btn-sm btn">Education &amp Work Details</button></a></th>
+            <th><a href="/dashboard/religionAndAstro"><button class="btn-sm btn">Religion &amp; Astro</button></a></th>
+            <th><a href="/dashboard/profileGallery"><button class="btn-sm btn">Gallery Photo</button></a></th>
+            <th><a href="/dashboard/uploadUserDocs"><button class="btn-sm btn">Upload Documents</button></a></th>
+            <th><a href="/dashboard/partnerPreference"><button class="btn-sm btn">Partner Preferences</button></a></th>
+            <!-- <th><a href="#"><button class="btn-sm btn">Contact Details</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Transaction History</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Shortlisted Profile</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Received Profiles</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Accepted Profile</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Send Profile</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Decline Profiles</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Reported Profiles</button></a></th>
+            <th><a href="#"><button class="btn-sm btn">Block Profile</button></a></th> -->
+            <th><a href="/dashboard/deleteUserProfile"><button class="btn-sm btn">Delete Profile</button></a></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div id="content mt-4" style="height: calc(100vh - 300px); overflow-y: hidden;">
+      <iframe name="content" id="content-frame" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- Image Preview Modal -->
+  <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.75rem;"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="previewImage" src="" alt="Preview Image">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script>
+  async function showImagePreview(image) {
+    var previewImage = document.getElementById('previewImage');
+    previewImage.src = image.src;
+    var modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+    modal.show();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get all th elements and add click event listeners
+    var thElements = document.querySelectorAll("th");
+
+    thElements.forEach(function (th) {
+      th.addEventListener("click", function () {
+        // Remove 'text-white' class from all buttons
+        var allButtons = document.querySelectorAll("button.btn-sm.btn");
+        allButtons.forEach(function (btn) {
+          btn.classList.remove("text-white");
+        });
+
+        // Add 'text-white' class only to the clicked button
+        var button = this.querySelector("button");
+        if (button) {
+          button.classList.add("text-white");
+        }
+
+        // Remove 'highlight' class from all th elements
+        thElements.forEach(function (element) {
+          element.classList.remove("highlight");
+        });
+
+        // Add 'highlight' class to clicked th element
+        this.classList.add("highlight");
+      });
+    });
+
+    // Add event listeners to each th element
+    var linkElements = document.querySelectorAll("th a");
+    linkElements.forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (this.getAttribute("href") !== "#") {
+          loadContentFromLink(this);
+        }
+      });
+    });
+
+    // Set iframe src to profile-admin on initial page load
+    const iframe = document.getElementById('content-frame');
+    iframe.src = '/dashboard/profileAdmin?userId=' + getUserId();
+
+    // Make an HTTP GET request to the endpoint with the specified documentId
+    fetch(`/api/getUserById/${getUserId()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any other headers if needed
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Extract the required user data
+        const userData = data.data;
+
+        let profileStatus = 'Pending'
+        if(userData.hideProfile === 'yes' && userData.blockProfile === 'yes' || userData.hideProfile === 'no' && userData.blockProfile === 'yes'){
+          profileStatus = 'Profile Blocked'
+        }else if(userData.hideProfile === 'yes' && userData.blockProfile === 'no'){
+          profileStatus = 'profile Hidden'
+        }else if(userData.hideProfile === 'no' && userData.blockProfile === 'no'){
+          profileStatus = 'Active'
+        }
+
+        // Update the HTML content with the retrieved data
+        setInnerHTMLById('profileIdSpan', data.id || null)
+        setInnerHTMLById('nameSpan', userData.firstName + ' ' + userData.lastName || null)
+        setInnerHTMLById('kycVerificationStatusSpan', userData.kyc.kycVerificationStatus || null)
+        setInnerHTMLById('profilrVerificationStatusSpan', userData.accountVerificationStatus || null)
+        setInnerHTMLById('statusSpan', profileStatus === 'pending' ? 'pending' : profileStatus || null)
+        const profileImageLink = userData.imgList[5].imgVerificationStatus === 'verified' ? userData.imgList[5].imgUrl : ''
+        setSrcById('userProfile', profileImageLink || 'https://svgsilh.com/svg/2098873.svg')
+
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  });
+
+  // Function to load content from clicked link into iframe
+  function loadContentFromLink(link) {
+    const iframe = document.getElementById('content-frame');
+    const userId = getUserId(); // Get the userId from wherever it's available
+    const url = link.href + '?userId=' + userId;
+    iframe.src = url;
+  }
+
+  // Function to get the userId
+  function getUserId() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get('userId');
+  }
+
+  // Helper function to set innerHTML by element id
+  function setInnerHTMLById(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.innerHTML = value || '';
+    }
+  }
+
+  // Helper function to set src by element id
+  function setSrcById(id, src) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.src = src || '';
+    }
+  }
+</script>
+
+
+
+</html>

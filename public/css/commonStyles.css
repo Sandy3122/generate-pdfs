@@ -1,0 +1,64 @@
+/* Customer Page */
+.form-control {
+    padding: 0.2rem 0.75rem !important;
+}
+.mb-2{
+    margin-bottom: 0.3rem !important;
+}
+#customerId{
+    margin-left: 0.7rem !important;
+}
+.form-select{
+    padding: .175rem 2.25rem .175rem .75rem !important;
+}
+.spanField, .labelField{
+    padding-left: 12px;
+    text-transform: capitalize;
+}
+
+input[readonly], textarea[readonly], select[readonly] {
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 0.25rem; /* Rounded corners */
+    color: #495057; /* Text color */
+    cursor: not-allowed; /* Disable cursor */
+}
+
+
+/* styles for photoGallery Section */
+.spanStrong {
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.textCapitalize{
+    text-transform: capitalize !important;
+}
+
+a {
+    color: rgb(38, 129, 240);
+    cursor: pointer !important;
+}
+
+.pdfField{
+    color: red;
+}
+
+/* Media queries for responsive text size */
+@media (max-width: 576px) {
+    .photo-details {
+        font-size: 0.75rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .photo-details {
+        font-size: 0.85rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .photo-details {
+        font-size: 1rem;
+    }
+}

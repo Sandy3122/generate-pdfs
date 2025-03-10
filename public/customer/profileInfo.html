@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Info</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile ID:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="profileId"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile Verification Status:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <select data-dropdown="profileVerificationStatus" id="accountVerificationStatus" class="form-select"
+                        disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile Registered By Id:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="profileRegisteredById"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile Registered By:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="profileRegisteredBy"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile Created Date:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="profileCreatedDate"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Profile Verified Date:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="accountVerifiedBy"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Block Profile:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="blockProfile"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Hide Profile:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="hideProfile"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Last Login Date:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="lastLoginDate"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Delete Profile:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="deleteProfile"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3 col-5">
+                    <span class="spanField">Reason For Delete:</span>
+                </div>
+                <div class="col-4 col-3">
+                    <span id="reasonForDelete"></span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center my-4  d-flex justify-content-center">
+            <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+        </div>
+
+    </div>
+
+</body>
+<script>
+    // Function to get the current date and time as a formatted string
+function getCurrentDateTime() {
+    const now = new Date();
+    return now.toISOString(); // ISO format (e.g., 2023-09-12T12:34:56.789Z)
+}
+
+// Function to populate user data to elements
+async function populateUserData(userData) {
+    const accountCreatedData = String(userData.accountCreatedBy);
+    const [accountCreatedByName, accountCreatedById, accountCreatedByPhone, accountCreatedTime] = accountCreatedData.split('/');
+
+    setInnerHTMLById("profileId", userData.customerId || "null");
+    setSelectedOption("accountVerificationStatus", userData.accountVerificationStatus || 'null');
+    setInnerHTMLById("profileRegisteredById", capitalizeWords(accountCreatedById) || "null");
+    setInnerHTMLById("profileRegisteredBy", capitalizeWords(accountCreatedByName) || "null");
+    setInnerHTMLById("profileCreatedDate", formatDateTime(accountCreatedTime) || "null");
+
+    // Only show the timestamp for accountVerifiedBy in the frontend
+    const accountVerifiedByData = userData.accountVerifiedBy;
+    const accountVerifiedTime = accountVerifiedByData.split('/').pop(); // Get only the timestamp
+    console.log('accountVerifiedTime: ', accountVerifiedTime, 'accountVerifiedByData: ', accountVerifiedByData)
+    console.log('accountVerifiedTime: ', accountVerifiedTime);
+    setInnerHTMLById("accountVerifiedBy", formatDateTime(accountVerifiedTime) || 'null');
+
+    setInnerHTMLById("blockProfile", userData.blockProfile || "null");
+    setInnerHTMLById("hideProfile", userData.hideProfile || "null");
+    setInnerHTMLById("lastLoginDate", userData.lastLoginDate || "null");
+    setInnerHTMLById("deleteProfile", userData.deleteProfile || "null");
+    setInnerHTMLById("reasonForDelete", userData.reasonForDelete || "null");
+
+    // Fetch the session data (e.g., logged-in user information)
+    const sessionData = await fetchSessionData();
+    // console.log('sessionData: ', sessionData);
+
+    // Handle Profile Verification Status change
+    const accountVerificationStatus = document.getElementById('accountVerificationStatus');
+    accountVerificationStatus.addEventListener('change', function () {
+        if (this.value === 'verified' || this.value === 'unVerified' || this.value === 'pending') {
+            // Update the Account Verified By field
+            const accountVerifiedByElement = document.getElementById('accountVerifiedBy');
+            if (accountVerifiedByElement) {
+                // Show only the current timestamp in the frontend
+                accountVerifiedByElement.textContent = formatDateTime(getCurrentDateTime());
+            }
+        }
+    });
+}
+
+// Call fetchUserData function with userId, userRole, inputIds
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const userId = urlParams.get('userId');
+// console.log('userId :', userId);
+
+const inputIds = ['accountVerificationStatus', 'accountVerifiedBy'];
+
+    // fetch user data and dropdowns;
+    populateDropDownsAndFetchUserData(userId);
+
+// Event listener for the Save Changes button
+document.getElementById('saveChanges').addEventListener('click', async function () {
+    // Fetch the session data (e.g., logged-in user information)
+    const sessionData = await fetchSessionData();
+    const updatedData = {};
+
+    inputIds.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            updatedData[inputId] = element.value || element.textContent;
+        } else {
+            console.warn(`Element with ID '${inputId}' not found.`);
+            updatedData[inputId] = null; // or any default value you want to set
+        }
+    });
+
+    // Update the accountVerifiedBy field before sending the data to the backend
+    if (updatedData['accountVerificationStatus'] === 'verified' || updatedData['accountVerificationStatus'] === 'unVerified' || updatedData['accountVerificationStatus'] === 'pending') {
+        const timeStamp = new Date();
+        const accountVerifiedBy = `${sessionData.name}/${sessionData.id}/${sessionData.phoneNumber}/${timeStamp}`;
+        updatedData['accountVerifiedBy'] = accountVerifiedBy;
+    }
+
+    console.log('updatedData: ', updatedData);
+    // Call the function to update user data
+    updateUserData(userId, updatedData);
+});
+</script>
+
+
+</html>

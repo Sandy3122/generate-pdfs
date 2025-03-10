@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+    <title>All Employees</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/tableStyles.css">
+</head>
+<body>
+<div class="container-fluid mt-1">
+    <!-- <h1 class="text-center mb-4">Employees Table</h1> -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Employee Table</h3>
+            <div class="table-responsive vh-100">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Account Status</th>
+                        <th>Actions</th>
+                        <th>Roles</th>
+                    </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                    <!-- Employee details will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (optional if you require dropdowns, modals, etc.) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/getAllEmployees.js"></script>
+</body>
+</html>

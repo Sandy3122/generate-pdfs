@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Religion &amp; Astro</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-lg-4 col-md-8 mb-3">
+                        <span class="spanField"><strong>Religion &amp; Astro: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Religion:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <!-- <input type="text" id="religion" class="form-control" value="" disabled> -->
+                            <select data-dropdown="religion" id="religion" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Caste:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="caste" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Sub Caste:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="subCaste" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Manglik:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="manglik" id="manglikStatus" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Rashi:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="rashi" id="rashi" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Time of Birth:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="time" id="timeOfBirth" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 col-lg-4">
+                            <span class="spanField">Birth Place:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="birthPlace" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    // Call fetchUserData function with userId, userRole, inputIds, and fieldMappings
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+
+    const inputIds = ['religion', 'caste', 'subCaste', 'manglikStatus', 'rashi', 'timeOfBirth', 'birthPlace'];
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+            if (inputElement.tagName.toLowerCase() === 'select') {
+                setSelectedOption(inputId, value);
+            } else {
+                changeInputValue(inputId, value);
+            }
+        });
+    }
+
+    // Define field mappings
+    const fieldMappings = [
+        { inputId: 'religion', fieldPath: 'religion' },
+        { inputId: 'caste', fieldPath: 'caste' },
+        { inputId: 'subCaste', fieldPath: 'subCaste' },
+        { inputId: 'manglikStatus', fieldPath: 'manglikStatus' },
+        { inputId: 'rashi', fieldPath: 'rashi' },
+        { inputId: 'timeOfBirth', fieldPath: 'timeOfBirth' },
+        { inputId: 'birthPlace', fieldPath: 'birthPlace' }
+    ];
+
+    // Fetch data and dropdowns
+    populateDropDownsAndFetchUserData(userId)
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+        // Construct the updated data object dynamically
+        const updatedData = {};
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+        // Call the function to update user data
+        console.log('updatedData: ', updatedData)
+        updateUserData(userId, updatedData);
+    });
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner Preferences</title>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+    
+
+<!-- Rendering all script tags and CDNS -->
+        
+<script src="/js/customer/allScripts.js"></script>
+
+<style>
+    .bootstrap-select {
+        width: 100% !important;
+    }
+    
+    .btn{
+        border: 1px solid #dee2e6 !important;
+        padding: 0.175rem 0.75rem !important;
+    }
+
+    .bootstrap-select>.dropdown-toggle.bs-placeholder, .bootstrap-select>.dropdown-toggle.bs-placeholder:active, .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, .bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+        color: #212529 !important;
+        border: 1px solid #dee2e6 !important;
+        background-color: #fff !important;
+        border-radius: .375rem !important;
+    }
+    
+    .btn, .btn:hover {
+        background-color: #fff !important;
+        border-color: solid #dee2e6 !important;
+    }
+    
+    .dropdown-menu.show{
+        min-width: 2.5rem !important;
+    }
+
+    #saveChanges:hover{
+        background-color: red !important;
+    }
+
+
+</style>
+</head> 
+
+<body>
+    <div class="container" style="margin-top: -2px;">
+        <div class="content">
+            <div class="row mb-2">  
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Education And Career: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Education Level:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="heighestQualification" id="partnerEducationLevel" class="form-select" ></select> -->
+                            <select id="partnerEducationLevel" data-dropdown="heighestQualification" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Working With:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="workingWith" id="partnerWorkingWith" class="form-select" ></select> -->
+                            <select id="partnerWorkingWith" data-dropdown="workingWith" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Annual Income:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="annualIncome" id="partnerAnnualIncome" class="form-select" ></select> -->
+                            <select id="partnerAnnualIncome" data-dropdown="annualIncome" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Age: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Min Age:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="age" id="partnerMinAge" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Max Age:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                           <select data-dropdown="age" id="partnerMaxAge" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Height: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Min Height:</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="height" id="partnerMinHeight" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Max Height:</span>
+                        </div>
+                        <div class="col-6">
+                           <select data-dropdown="height" id="partnerMaxHeight" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Address: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Country:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select id="partnerCountry" class="selectpicker" multiple data-live-search="true" title="Select" >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">State:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select id="partnerState" class="selectpicker" multiple data-live-search="true" title="Select" >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">City:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select id="partnerCity" class="form-select" > -->
+                                <select id="partnerCity" class="selectpicker" multiple data-live-search="true" title="Select" >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Marital And Social Status: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Marital Status:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="maritalStatus" id="partnerMaritalStatus" class="form-select" ></select> -->
+                            <select id="partnerMaritalStatus" data-dropdown="maritalStatus" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Religion:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="religion" id="partnerReligion" class="form-select" ></select> -->
+                            <select id="partnerReligion" data-dropdown="religion" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Caste:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" id="partnerCaste" class="form-control" value="" title="Select" >
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Sub Caste:</span>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" id="partnerSubCaste" class="form-control" value="" title="Select" >
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Manglik:</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="manglik" id="partnerManglikStatus" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Language:</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="language" id="partnerLanguage" class="form-select" ></select> -->
+                            <select id="partnerLanguage" data-dropdown="language" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Health And Lifestyle: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Diet:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <select data-dropdown="diet" id="partnerDiet" class="form-select" ></select> -->
+                            <select id="partnerDiet" data-dropdown="diet" class="selectpicker" multiple data-live-search="true" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Drink:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="drink" id="partnerDrink" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Smoke:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="smoke" id="partnerSmoke" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-4 col-6">
+                            <span class="spanField">Disability:</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="anyDisability" id="partnerDisability" class="selectpicker" title="Select" ></select>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <div class="text-center mb-4 d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<script>
+
+// Call fetchUserData function with userId, userRole, inputIds, and fieldMappings
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const userId = urlParams.get('userId');
+
+    
+
+// Initializing empty data containers
+let countryData = {};
+var userGender;
+var userData;
+
+// Utility function to reinitialize and refresh selectpicker
+const reinitializeSelectpicker = (selectElement) => {
+    if ($.fn.selectpicker) {
+        $(selectElement).selectpicker();
+        $(selectElement).selectpicker('refresh');
+    } else {
+        console.error("Selectpicker is not initialized");
+    }
+};
+
+async function fetchUserGender(userId) {
+    try {
+        // Fetch the gender data
+        const response = await fetch(`/api/appusers/${userId}?fields=gender`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.data && data.data.gender) {
+            userGender = data.data.gender;
+            // Proceed to fetch and populate country, state, city data
+            await fetchAndPopulateCountryStateCityData();
+        } else {
+            console.error("Gender not found in the server response");
+        }
+    } catch (error) {
+        console.error('Error fetching user gender:', error);
+    }
+}
+
+async function fetchAndPopulateCountryStateCityData() {
+    try {
+        // Fetch the country and state data from the server
+        const response = await fetch('/api/country-dropdown');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data) {
+            Object.assign(countryData, data);  // Assign the entire data to countryData
+
+            // Populate the country dropdown
+            populateCountryDropdowns(countryData);
+
+            const countrySelect = document.getElementById('partnerCountry');
+            countrySelect.addEventListener('change', (event) => {
+                const selectedCountries = Array.from(event.target.selectedOptions).map(option => option.value);
+                populateStateDropdowns(selectedCountries);
+            });
+
+            const stateSelect = document.getElementById('partnerState');
+            stateSelect.addEventListener('change', (event) => {
+                const selectedStates = Array.from(event.target.selectedOptions).map(option => option.value);
+                populateCityDropdowns(selectedStates);
+            });
+
+            reinitializeSelectpicker(countrySelect);
+        } else {
+            console.error("No data found in the server response");
+        }
+    } catch (error) {
+        console.error('Error fetching country and state data:', error);
+    }
+}
+
+
+const populateCountryDropdowns = (data) => {
+    const countrySelect = document.getElementById('partnerCountry');
+    const previouslySelectedCountries = Array.from(countrySelect.selectedOptions)
+        .map(option => option.value)
+        .filter(value => value.trim() !== ''); // Filter out any empty selections
+
+    countrySelect.innerHTML = '';
+
+    // Sort countries alphabetically, and filter out empty values or whitespace-only strings
+    const sortedCountries = Object.keys(data)
+        .filter(country => country.trim() !== '')  // Exclude empty or whitespace-only values
+        .sort((a, b) => a.localeCompare(b));
+
+    sortedCountries.forEach(country => {
+        const option = new Option(country, country);
+        // Check if the country was previously selected, and ensure it's not an empty value
+        if (previouslySelectedCountries.includes(country)) {
+            option.selected = true; // Retain selection for valid countries
+        }
+        countrySelect.add(option);
+    });
+
+    reinitializeSelectpicker(countrySelect);
+};
+
+const populateStateDropdowns = (selectedCountries) => {
+    const stateSelect = document.getElementById('partnerState');
+    const previouslySelectedStates = Array.from(stateSelect.selectedOptions).map(option => option.value);
+    // Clear existing options
+    stateSelect.innerHTML = '';
+
+    // Sort selected countries
+    const sortedCountries = selectedCountries.sort((a, b) => a.localeCompare(b));
+
+    sortedCountries.forEach(country => {
+        const states = countryData[country];
+        if (states) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = country;  // Group label for country
+
+            // Sort states alphabetically
+            const sortedStates = Object.keys(states).sort((a, b) => a.localeCompare(b));
+            sortedStates.forEach(stateCode => {
+                const option = new Option(capitalizeWordsWithSpaces(stateCode), stateCode);
+                // Check if the state was previously selected
+                if (previouslySelectedStates.includes(stateCode)) {
+                    option.selected = true; // Retain selection
+                }
+                optgroup.appendChild(option);
+            });
+            stateSelect.appendChild(optgroup);
+        } else {
+            console.warn(`No states found for country: ${country}`);
+        }
+    });
+
+    reinitializeSelectpicker(stateSelect);
+};
+
+const populateCityDropdowns = (selectedStates) => {
+    const citySelect = document.getElementById('partnerCity');
+    const previouslySelectedCities = Array.from(citySelect.selectedOptions).map(option => option.value);
+    citySelect.innerHTML = ''; // Clear previous options
+
+    // Sort selected states
+    const sortedStates = selectedStates.sort((a, b) => a.localeCompare(b));
+
+    sortedStates.forEach(stateCode => {
+        for (let country in countryData) {
+            const states = countryData[country];
+            if (states[stateCode]) {
+                const cities = states[stateCode];
+
+                if (cities) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `${capitalizeWordsWithSpaces(country)} - ${capitalizeWordsWithSpaces(stateCode)}`;  // Country and state label
+
+                    // Sort cities alphabetically
+                    const sortedCities = Object.keys(cities).sort((a, b) => a.localeCompare(b));
+                    sortedCities.forEach(cityCode => {
+                        if (cityCode.trim() !== '') {
+                            const option = new Option(cities[cityCode], cityCode);
+                            // Check if the city was previously selected
+                            if (previouslySelectedCities.includes(cityCode)) {
+                                option.selected = true; // Retain selection
+                            }
+                            optgroup.appendChild(option);
+                        }
+                    });
+
+                    citySelect.appendChild(optgroup);
+                } else {
+                    console.warn(`No cities found for state: ${stateCode}`);
+                }
+            }
+        }
+    });
+
+    reinitializeSelectpicker(citySelect);
+};
+
+
+document.getElementById('saveChanges').addEventListener('click', function () {
+    const updatedData = { partnerDetails: {} };
+
+    fieldMappings.forEach(mapping => {
+        const element = document.getElementById(mapping.inputId);
+        if (element.tagName === 'SELECT' && element.multiple) {
+            const selectedOptions = Array.from(element.selectedOptions).map(option => option.value).filter(value => value !== "");
+            if (selectedOptions.length > 0) {
+                updatedData.partnerDetails[mapping.inputId] = selectedOptions;
+            }
+        } else if (element.value.trim() !== "") {
+            updatedData.partnerDetails[mapping.inputId] = element.value;
+        }
+    });
+
+    const countrySelect = document.getElementById('partnerCountry');
+    const selectedCountries = Array.from(countrySelect.selectedOptions).map(option => option.value).filter(country => country !== "");
+
+    const stateSelect = document.getElementById('partnerState');
+    updatedData.partnerDetails['partnerStatesAndCity'] = {};
+
+    selectedCountries.forEach(country => {
+        updatedData.partnerDetails['partnerStatesAndCity'][country] = {};
+
+        const selectedStates = Array.from(stateSelect.selectedOptions).map(option => option.value).filter(state => countryData[country]?.[state]);
+        selectedStates.forEach(state => {
+            const citySelect = document.getElementById('partnerCity');
+            const selectedCities = Array.from(citySelect.selectedOptions).map(option => option.value).filter(city => isCityInState(city, state, country));
+            if (selectedCities.length > 0) {
+                updatedData.partnerDetails['partnerStatesAndCity'][country][state] = selectedCities;
+            }
+        });
+    });
+
+    console.log('updatedData: ', updatedData)
+    if (Object.keys(updatedData.partnerDetails).length > 0) {
+        updateUserData(userId, updatedData);
+    } else {
+        console.error('No valid data to update.');
+    }
+});
+
+
+// Function to check if the city belongs to the state
+function isCityInState(city, state, country) {
+    const stateCities = countryData[country]?.[state];
+    return stateCities && city in stateCities;
+}
+
+
+// document.getElementById('saveChanges').addEventListener('click', async function () {
+//     if (!userId) {
+//         console.error('User ID not found.');
+//         return;
+//     }
+
+//     try {
+//         // Fetch existing user data
+//         const userData = await fetchUserData(userId);
+//         console.log('userData: ', userData);
+
+//         const existingPartnerDetails = userData.partnerDetails || {};
+//         console.log('existingPartnerDetails: ', existingPartnerDetails);
+
+//         // Prepare updated data object
+//         const updatedData = { partnerDetails: {} };
+
+//         // Map form inputs to partnerDetails
+//         fieldMappings.forEach(mapping => {
+//             const element = document.getElementById(mapping.inputId);
+//             if (element) {
+//                 if (element.tagName === 'SELECT' && element.multiple) {
+//                     const selectedOptions = Array.from(element.selectedOptions)
+//                         .map(option => option.value)
+//                         .filter(value => value !== "");
+//                     if (selectedOptions.length > 0) {
+//                         updatedData.partnerDetails[mapping.inputId] = selectedOptions;
+//                     }
+//                 } else if (element.value.trim() !== "") {
+//                     updatedData.partnerDetails[mapping.inputId] = element.value.trim();
+//                 }
+//             }
+//         });
+
+//         // Populate partnerStatesAndCity
+//         const countrySelect = document.getElementById('partnerCountry');
+//         const selectedCountries = Array.from(countrySelect.selectedOptions)
+//             .map(option => option.value)
+//             .filter(country => country !== "");
+
+//         const stateSelect = document.getElementById('partnerState');
+//         updatedData.partnerDetails['partnerStatesAndCity'] = {};
+
+//         selectedCountries.forEach(country => {
+//             console.log(`Processing country: ${country}`);
+//             updatedData.partnerDetails['partnerStatesAndCity'][country] = {};
+
+//             const selectedStates = Array.from(stateSelect.selectedOptions)
+//                 .map(option => option.value)
+//                 .filter(state => countryData[country]?.[state]);
+
+//             selectedStates.forEach(state => {
+//                 console.log(`Processing state: ${state} in country: ${country}`);
+
+//                 const citySelect = document.getElementById('partnerCity');
+//                 const selectedCities = Array.from(citySelect.selectedOptions)
+//                     .map(option => option.value)
+//                     .filter(city => isCityInState(city, state, country));
+
+//                 if (selectedCities.length > 0) {
+//                     updatedData.partnerDetails['partnerStatesAndCity'][country][state] = selectedCities;
+//                 }
+//             });
+//         });
+
+//         console.log('...existingPartnerDetails: ', ...existingPartnerDetails);
+//         console.log('...updatedData: ', ...updatedData.partnerDetails);
+
+//         // Merge with existing partnerDetails
+//         updatedData.partnerDetails = {
+//             ...existingPartnerDetails, // Retain existing fields
+//             ...updatedData.partnerDetails // Overwrite only updated fields
+//         };
+
+//         console.log('Final updatedData to send:', updatedData);
+
+//         // Update user data
+//         await updateUserData(userId, updatedData);
+//         console.log('User data successfully updated.');
+
+//     } catch (error) {
+//         console.error('Error fetching or updating user data:', error);
+//     }
+// });
+
+
+
+
+const inputIds = [
+    'partnerEducationLevel', 'partnerWorkingWith', 'partnerAnnualIncome', 
+    'partnerMinAge', 'partnerMaxAge', 
+    'partnerMinHeight', 'partnerMaxHeight', 
+    'partnerMaritalStatus', 'partnerReligion', 'partnerCaste', 'partnerSubCaste', 
+    'partnerManglikStatus', 'partnerLanguage', 
+    'partnerDiet', 'partnerDrink', 'partnerSmoke', 'partnerDisability', 
+    'partnerCountry', 'partnerState', 'partnerCity'
+    ];
+
+
+    // Define field mappings
+const fieldMappings = [
+    { inputId: 'partnerEducationLevel', fieldPath: 'partnerDetails.partnerEducationLevel' },
+    { inputId: 'partnerWorkingWith', fieldPath: 'partnerDetails.partnerWorkingWith' },
+    { inputId: 'partnerAnnualIncome', fieldPath: 'partnerDetails.partnerAnnualIncome' },
+    { inputId: 'partnerMinAge', fieldPath: 'partnerDetails.partnerMinAge' },
+    { inputId: 'partnerMaxAge', fieldPath: 'partnerDetails.partnerMaxAge' },
+    { inputId: 'partnerMinHeight', fieldPath: 'partnerDetails.partnerMinHeight' },
+    { inputId: 'partnerMaxHeight', fieldPath: 'partnerDetails.partnerMaxHeight' },
+    { inputId: 'partnerMaritalStatus', fieldPath: 'partnerDetails.partnerMaritalStatus' },
+    { inputId: 'partnerReligion', fieldPath: 'partnerDetails.partnerReligion' },
+    { inputId: 'partnerCaste', fieldPath: 'partnerDetails.partnerCaste' },
+    { inputId: 'partnerSubCaste', fieldPath: 'partnerDetails.partnerSubCaste' },
+    { inputId: 'partnerManglikStatus', fieldPath: 'partnerDetails.partnerManglikStatus' },
+    { inputId: 'partnerLanguage', fieldPath: 'partnerDetails.partnerLanguage' },
+    { inputId: 'partnerDiet', fieldPath: 'partnerDetails.partnerDiet' },
+    { inputId: 'partnerDrink', fieldPath: 'partnerDetails.partnerDrink' },
+    { inputId: 'partnerSmoke', fieldPath: 'partnerDetails.partnerSmoke' },
+    { inputId: 'partnerDisability', fieldPath: 'partnerDetails.partnerDisability' },
+    { inputId: 'partnerCountry', fieldPath: 'partnerDetails.partnerCountry' },
+    { inputId: 'partnerState', fieldPath: 'partnerDetails.partnerState' },
+    { inputId: 'partnerCity', fieldPath: 'partnerDetails.partnerCity' }
+];
+
+// Function to get property value by nested path
+function getPropertyByPath(obj, path) {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+}
+
+
+async function populateUserData(userData) {
+    userData = userData;
+
+    // Populate all dropdowns first
+    populateCountryDropdowns(countryData);
+    populateStateDropdowns(Object.keys(countryData));
+
+    // Populate the state dropdown based on user data
+    const stateSelect = document.getElementById('partnerState');
+    const selectedStates = Array.from(stateSelect.selectedOptions).map(option => option.value);
+
+    // Populate the city dropdown based on selected states
+    populateCityDropdowns(selectedStates);
+
+    // Populate the dropdowns based on user data
+    fieldMappings.forEach(mapping => {
+        const { inputId, fieldPath } = mapping;
+        const value = getPropertyByPath(userData, fieldPath) || "";
+        const inputElement = document.getElementById(inputId);
+
+        if (inputElement.tagName === 'SELECT') {
+            // Check if the input element is a multiple select
+            const selectedValues = Array.isArray(value) ? value : [value];
+
+            // Get all available options
+            const allOptions = Array.from(inputElement.options);
+
+            // Set all options as not selected initially
+            allOptions.forEach(option => {
+                option.selected = false; // Reset selection
+            });
+
+            // Mark the fetched values as selected
+            selectedValues.forEach(selectedValue => {
+                const option = allOptions.find(option => option.value === selectedValue);
+                if (option) {
+                    option.selected = true;
+                } else {
+                    // If the option doesn't exist, add it (if required)
+                    const newOption = new Option(selectedValue, selectedValue, true, true);
+                    inputElement.add(newOption);
+                    newOption.selected = true;
+                }
+            });
+        } else {
+            inputElement.value = value; // For non-select elements
+        }
+    });
+
+
+
+// Initialize the max dropdowns update function
+function updateMaxDropdowns() {
+    const minAgeSelect = document.getElementById('partnerMinAge');
+    const maxAgeSelect = document.getElementById('partnerMaxAge');
+    const minHeightSelect = document.getElementById('partnerMinHeight');
+    const maxHeightSelect = document.getElementById('partnerMaxHeight');
+
+    // Update max age options based on selected min age
+    minAgeSelect.addEventListener('change', function () {
+        const selectedMinAge = parseInt(minAgeSelect.value, 10);
+        maxAgeSelect.innerHTML = '<option value="">Select</option>';
+
+        // Use only the options from the min dropdown, including the selected min age
+        Array.from(minAgeSelect.options).forEach(option => {
+            const age = parseInt(option.value, 10);
+            if (age >= selectedMinAge) {
+                const newOption = document.createElement('option');
+                newOption.value = option.value;
+                newOption.textContent = option.textContent;
+                maxAgeSelect.appendChild(newOption);
+            }
+        });
+
+        // Refresh selectpicker if applicable
+        if (maxAgeSelect.classList.contains('selectpicker')) {
+            $(maxAgeSelect).selectpicker('refresh');
+        }
+    });
+
+    // Update max height options based on selected min height
+    minHeightSelect.addEventListener('change', function () {
+        const selectedMinHeight = parseFloat(minHeightSelect.value);
+        maxHeightSelect.innerHTML = '<option value="">Select</option>';
+
+        // Use only the options from the min dropdown, including the selected min height
+        Array.from(minHeightSelect.options).forEach(option => {
+            const height = parseFloat(option.value);
+            if (height >= selectedMinHeight) {
+                const newOption = document.createElement('option');
+                newOption.value = option.value;
+                newOption.textContent = option.textContent;
+                maxHeightSelect.appendChild(newOption);
+            }
+        });
+
+        // Refresh selectpicker if applicable
+        if (maxHeightSelect.classList.contains('selectpicker')) {
+            $(maxHeightSelect).selectpicker('refresh');
+        }
+    });
+}
+
+// Call this function to activate the min-max dropdown updates
+updateMaxDropdowns();
+
+
+}
+
+
+async function fetchDataProperly(userId) {
+    try {
+        showLoader();  // Display loader while fetching
+
+
+        // Once dropdowns are populated, fetch the user data
+        const userData = await fetchUserData(userId);
+        localStorage.setItem('userData: ', JSON.stringify(userData));
+
+        await fetchUserGender(userId);
+
+        // Populate fields with the user data
+        await populateDropdowns(userGender);
+
+        // Once dropdowns are populated, fetch the user data
+        await fetchUserData(userId);
+
+        hideLoader();
+    } catch (error) {
+        console.error('Error while fetching the data:', error);
+        hideLoader();
+    }
+}
+
+fetchDataProperly(userId)
+
+
+</script>
+
+</html>

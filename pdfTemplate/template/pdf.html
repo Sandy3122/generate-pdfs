@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Card</title>
+    <style>
+        /* .waterMark {
+            position: relative;
+        } */
+        
+        .waterMark::before {
+            content: "MatchingJodi.Com";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(54.5deg);
+            font-size: 120px;
+            color: rgba(0, 0, 0, 0.07);
+            z-index: 6;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .waterMark > div {
+            position: relative;
+            z-index: 4;
+        }
+
+    p, span, a{
+        font-size: 17px;
+        /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+        letter-spacing: 0.5px;
+    }
+
+    #aboutme {
+    padding: 0px 18px 0px 18px;
+    max-height: 17em; /* Adjust this based on the font size and line height */
+    overflow: hidden;
+}
+
+#aboutme .field {
+    padding-top: 0px;
+    text-align: justify;
+    letter-spacing: 1px;
+    font-size: 17px;
+    line-height: 1.1em; /* Adjust line height as needed */
+    /* display: -webkit-box; */
+    display: block;
+    white-space: pre-line;
+    -webkit-line-clamp: 11; /* Display up to 10 lines */
+    /* -webkit-box-orient: vertical; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+}
+
+
+/* Add specific styling for line breaks */
+#aboutme .field br {
+        line-height: 0em; /* Reduced space after line breaks */
+        content: "";
+        display: block;
+        margin: 0 !important; /* Reduced margin between paragraphs */
+        padding: 0 !important;
+    }
+
+    .profile-card .fields {
+        padding: 0px !important;
+        margin: 0px !important;
+        padding-top: 0px !important;
+        line-height: 18px !important;
+    }
+</style>
+
+</head>
+<body style="height: 100vh; width: 100%; margin: 0; font-family: Arial, sans-serif; background: linear-gradient(54.5deg, #f5f6fa 50%, #c1d4ec 50%); z-index: -1;">
+
+<div class="waterMark" style="position: relative; padding: 30px;">
+
+
+        <div class="profile-card" style="padding: 5px">
+            <div class="background-design" style="position: absolute; top: 0; left: 0; height: 100%;"></div>
+            
+            <!-- Profile Header -->
+            <div class="text-center profile-header" style="text-align: center;">
+                <h1 style="font-size: 48px; font-weight: bold; margin-top: -5px;"><%= fullName %></h1>
+                <p class="font-weight-bold" style="color: gray; font-size: 20px; font-weight: bold; margin-top: -25px;"><%= customerId %></p>
+            </div>
+
+            <div class="section-title" style="background-color: #696969; color: white; padding: 9px;  margin-top: -5px; font-size: 16px; border-radius: 20px; text-align: center;">About Me</div> 
+            <div class="fields" id="aboutme">
+                <p class="field"><%- aboutMe.replace(/\\n/g, '<br>') %></p>
+            </div>
+        
+            <div class="row" style="display: flex; justify-content: space-between; margin-top: 12px;">
+                <!-- Basic Details -->
+                <div class="col-md-6" style="width: 49%;">
+
+                    <div class="section-title" style="background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center;">Basic Details</div>
+                    <div class="fields" style="padding: 0px 8px;">
+                        <p class="field" style="padding-top: 0px;"><strong>Age :</strong> <%= age %> Yrs</p>
+                        <p class="field" style="padding-top: 0px;"><strong>Date Of Birth:</strong> <%= birthDate %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Height:</strong> <%= height %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>State - City :</strong> <%= stateAndCity %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Marital Status:</strong> <%= maritalStatus %></p>
+                    </div>
+        
+                <!-- Religion And Astro -->
+                    <div class="section-title" style="background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center;">Religion & Astro</div>
+                    <div class="fields" style="padding: 0px 8px;">
+                        <p class="field" style="padding-top: 0px;"><strong>Religion:</strong> <%= religion %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Caste:</strong> <%= caste %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Manglik :</strong> <%= manglik %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Time of Birth:</strong> <%= timeOfBirth %></p>
+                        <p class="field" style="padding-top: 0px;"><strong>Place of Birth:</strong> <%= placeOfBirth %></p>
+                    </div>
+
+
+                <!-- Education And Profession -->
+                    <div class="section-title" style="background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center;">Education And Profession</div>
+                    <div class="fields" style="padding: 0px 8px;">
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Education:</strong> <%= education %></p>
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Working With:</strong> <%= workingWith %></p>
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Annual Income:</strong> <%= income %></p>
+                    </div>
+        
+                <!-- Family-->
+                    <div class="section-title" style="background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center;">Family</div>
+                    <div>
+                        <div class="fields" style="padding: 0px 8px;">
+                            <p class="field" style="padding-top: 0px;"><strong>Father Name:</strong> <%= fatherName %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Occupation:</strong> <%= fatherOccupation %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Mother Name:</strong> <%= motherName %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Occupation:</strong> <%= motherOccupation %></p>
+                        </div>
+                        <div class="fields" style="display: flex; padding: 0px 8px;">
+                            <!-- Left Column -->
+                            <div style="width: 49%;">
+                                <p class="field" style="padding-top: 0px; text-align: left; margin: 0;"><strong>Sisters:</strong> <%= noOfSisters %></p>
+                                <p class="field" style="padding-top: 12px; text-align: left; margin: 0;"><strong>Brothers:</strong> <%= noOfBrothers %></p>
+                            </div>
+                        
+                            <!-- Right Column -->
+                            <div style="width: 49%; padding: 0px 0px 0px 18px; margin: 0;">
+                                <p class="field" style="padding-top: 0px; text-align: left; margin: 0;"><strong>Married:</strong> <%= noOfSistersMarried %></p>
+                                <p class="field" style="padding-top: 12px; text-align: left; margin: 0;"><strong>Married:</strong> <%= noOfBrothersMarried %></p>
+                            </div>
+                        </div>
+
+                    <div class="section-title" style="margin-top: 17px; background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center;">Life Style</div>
+                    <div class="fields" style="padding: 0px 8px;">
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Diet:</strong> <%= diet %></p>
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Drink:</strong> <%= drink %></p>
+                        <p class="field" style="padding-top: 0px; text-align: left;"><strong>Smoke:</strong> <%= smoke %></p>
+                    </div>
+                    </div>
+                </div>
+        
+                <!-- Profile Image and Family Details -->
+                <div class="col-md-6 text-center" style="width: 49%; text-align: center;">
+                    <img src="<%= profilePhoto %>" alt="Profile Photo" class="profile-photo" style="width: 450px; height: 500px; border-radius: 8%; object-fit: cover; overflow: hidden; border: 3px solid #ffffff; margin-top: 5px;">
+                    
+                    <div class="mt-5 text-align" style="text-align: start;">
+                        <div class="section-title" style="background-color: #696969; color: white; padding: 9px; font-size: 16px; border-radius: 20px; text-align: center; margin-top: 4px;">Partner Preferences</div>
+                        <div class="fields" style="padding: 0px 8px;">
+                            <p style="padding-top: 0px;"><strong>Age:</strong> <%= partnerAge %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Religion:</strong> <%= partnerReligion %></p>
+                            <p style="padding-top: 0px;"><strong>Marital Status:</strong> <%= partnerMaritalStatus %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Caste:</strong> <%= partnerCaste %></p>
+                            <p style="padding-top: 0px;"><strong>Location:</strong> <%= partnerLocation %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Education Level:</strong> <%= partnerEducationLevel %></p>
+                            <p style="padding-top: 0px;"><strong>Working With:</strong> <%= partnerWorkingWith %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Manglik:</strong> <%= partnerManglik %></p>
+                            <p style="padding-top: 0px;"><strong>Diet:</strong> <%= partnerDiet %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Drink:</strong> <%= partnerDrink %></p>
+                            <p class="field" style="padding-top: 0px;"><strong>Smoke:</strong> <%= partnerSmoke %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Footer -->
+        <div class="contact" style="font-size: 14px; color: gray; display: flex; justify-content: flex-end;  position: relative;">
+            <span>Customer Support: <a style="text-decoration: none;" href="tel:+91 9561790707">+91 9561790707</a></span>
+        </div>
+        
+</div>
+
+
+
+
+
+<!-- <div class="waterMark">
+
+
+</div> -->
+
+
+</body>
+</html>

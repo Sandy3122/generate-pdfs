@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandatory Details</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">First Name:</span><span class="pdfField">*</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <input type="text" id="firstName" class="form-control" value="" disabled>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Last Name:</span><span class="pdfField">*</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <input type="text" id="lastName" class="form-control" value="" disabled>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Gender:</span><span class="pdfField">*</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="gender" id="gender" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Email Id:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <input type="text" id="email" class="form-control" value="" disabled>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Date Of Birth:</span><span class="pdfField">*</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <input type="date" id="dateOfBirth" class="form-control" value="" placeholder="DD-MM-YYYY" disabled>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Marital Status:</span><span class="pdfField">*</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="maritalStatus" id="maritalStatus" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">No of Child:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <input type="number" id="noOfChild" class="form-control" value="" disabled>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Living With Child:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="livingWithChild" id="livingWithChild" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Religion:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="religion" id="religion" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        setInnerHTMLById("profileId", userData.customerId || "null");
+        changeInputValue("firstName", capitalizeWords(userData.firstName) || "null");
+        changeInputValue("lastName", capitalizeWords(userData.lastName) || "null");
+        setSelectedOption("gender", userData.gender || "null");
+        changeInputValue("email", userData.email || "null");
+        changeInputValue("dateOfBirth", userData.dateOfBirth);
+        setSelectedOption("maritalStatus", userData.maritalStatus || "null");
+        changeInputValue("noOfChild", userData.noOfChild || 0);
+        setSelectedOption("livingWithChild", userData.livingWithChild || "null");
+        setSelectedOption("religion", userData.religion || "null");
+    }
+
+    // Call fetchUserData function with userId, userRole, inputIds
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    // console.log('userId :', userId)
+
+    
+    const inputIds = ['firstName', 'lastName', 'gender', 'email', 'dateOfBirth', 'maritalStatus', 'noOfChild', 'livingWithChild', 'religion'];
+
+    // fetchUserData(userId);
+    populateDropDownsAndFetchUserData(userId)
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+
+        // Construct the updated data object
+        const updatedData = {};
+        inputIds.forEach(inputId => {
+            updatedData[inputId] = document.getElementById(inputId).value;
+        });
+
+        console.log('updatedData: ', updatedData)
+        // Calculate the age and add it to the updated data object
+        if (updatedData.dateOfBirth) {
+            updatedData.age = calculateAge(updatedData.dateOfBirth);
+        }
+
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+    
+    // Fetching dropdowns
+    // populateDropdowns();
+</script>
+
+</html>

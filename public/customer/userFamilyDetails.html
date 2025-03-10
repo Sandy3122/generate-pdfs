@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Details</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-lg-6 col-md-8 mb-3">
+                        <span class="spanField"><strong>Guardian 1 (Primary): </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Relation:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="relation" id="primaryRelation" class="form-select" disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Name:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="primaryName" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Phone Number:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="tel" class="form-control" id="primaryPhoneNumber" name="phoneNumber" required
+                                pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                oninvalid="this.setCustomValidity('Phone number must be exactly 10 digits')"
+                                oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Occupation:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="workingWith" id="primaryOccupation" class="form-select"
+                                disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-12 col-lg-6 col-md-8 mb-3">
+                        <span class="spanField"><strong>Guardian 2 (Secondary): </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Relation:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="relation" id="secondaryRelation" class="form-select"
+                                disabled></select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Name:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="secondaryName" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Phone Number:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="tel" class="form-control" id="secondaryPhoneNumber" name="phoneNumber" required
+                                pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                oninvalid="this.setCustomValidity('Phone number must be exactly 10 digits')"
+                                oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>                    
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">occupation:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select data-dropdown="workingWith" id="secondaryOccupation" class="form-select"
+                                disabled></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-lg-6 col-md-8 mb-3">
+                    <span class="spanField"><strong>Siblings: </strong></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">No Of Brothers:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <!-- <input type="tel" id="noOfBrother" class="form-control" value="" disabled> -->
+                            <input type="phone" class="form-control" id="noOfBrother" name="noOfBrother" required maxlength="1" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Married Brothers:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <!-- <input type="tel" id="brotherMarried" class="form-control" value="" disabled> -->
+                            <input type="phone" class="form-control" id="brotherMarried" name="brotherMarried" required maxlength="1" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">No Of Sisters:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <!-- <input type="tel" id="noOfSister" class="form-control" value="" disabled> -->
+                            <input type="phone" class="form-control" id="noOfSister" name="noOfSister" required maxlength="1" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="row mb-2">
+                        <div class="col-5 col-lg-4">
+                            <span class="spanField">Married Sister:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <!-- <input type="tel" id="sisterMarried" class="form-control" value="" disabled> -->
+                            <input type="phone" class="form-control" id="sisterMarried" name="sisterMarried" required maxlength="1" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" oninput="this.setCustomValidity('')" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Call fetchUserData function with userId, userRole, inputIds, and fieldMappings
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    
+    const inputIds = ['primaryRelation', 'primaryName', 'primaryOccupation', 'secondaryRelation', 'secondaryName', 'secondaryOccupation', 'noOfBrothers', 'noOfSisters', 'brotherMarried', 'sisterMarried'];
+
+    // Define field mappings including brothers and sisters fields
+    const fieldMappings = [
+        { inputId: 'primaryRelation', fieldPath: 'primaryGuardian.primaryGuardianRelation' },
+        { inputId: 'primaryName', fieldPath: 'primaryGuardian.primaryGuardianName' },
+        { inputId: 'primaryPhoneNumber', fieldPath: 'primaryGuardian.primaryGuardianPhoneNumber' },
+        { inputId: 'primaryOccupation', fieldPath: 'primaryGuardian.primaryGuardianOccupation' },
+        { inputId: 'secondaryRelation', fieldPath: 'secondaryGuardian.secondaryGuardianRelation' },
+        { inputId: 'secondaryName', fieldPath: 'secondaryGuardian.secondaryGuardianName' },
+        { inputId: 'secondaryPhoneNumber', fieldPath: 'secondaryGuardian.secondaryGuardianPhoneNumber' },
+        { inputId: 'secondaryOccupation', fieldPath: 'secondaryGuardian.secondaryGuardianOccupation' },
+        { inputId: 'noOfBrother', fieldPath: 'noOfBrothers' },
+        { inputId: 'brotherMarried', fieldPath: 'noOfBrothersMarried' },
+        { inputId: 'noOfSister', fieldPath: 'noOfSisters' },
+        { inputId: 'sisterMarried', fieldPath: 'noOfSistersMarried' }
+    ];
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+            if (inputElement.tagName.toLowerCase() === 'select') {
+                setSelectedOption(inputId, value);
+            } else {
+                changeInputValue(inputId, value);
+            }
+        });
+    }
+
+
+    // fetchUserData(userId);
+    populateDropDownsAndFetchUserData(userId)
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+        // Construct the updated data object dynamically
+        const updatedData = {};
+        // Update data using fieldMappings
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+
+    // Fetching dropdowns
+    // populateDropdowns();
+</script>
+
+</html>

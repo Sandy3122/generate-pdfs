@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Documents</title>
+    <script src="/js/customer/allScripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <style>
+        .span {
+            padding: 12px 0px !important;
+            margin: 12px 0px !important;
+        }
+
+        .btn-outline-danger {
+            margin: 0px 0px 0px 20px !important;
+        }
+
+        #imageContainer {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .crop-container {
+            text-align: center;
+            height: auto;
+        }
+        
+        .cropper-canvas img {
+            max-width: 100%;
+        }
+
+        #cropImage {
+            max-height: 500px;
+            margin: auto;
+        }
+
+        /* Updated crop modal styles */
+        #cropModal .modal-dialog {
+            max-width: 45vw;
+            margin: 1.75rem auto;
+        }
+
+        #cropModal .modal-content {
+            height: 90vh;
+        }
+
+        #cropModal .modal-body {
+            height: calc(90vh - 120px);
+            padding: 0;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crop-container {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #cropImage {
+            max-height: none;
+            max-width: none;
+        }
+
+        /* Cropper.js custom styles */
+        .cropper-container {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .cropper-wrap-box {
+            background-color: #f8f9fa;
+        }
+
+        .cropper-view-box {
+            outline: 2px solid #fff;
+            outline-color: rgba(255, 255, 255, 0.75);
+        }
+
+        .cropper-point {
+            width: 10px;
+            height: 10px;
+            background-color: #ffc107;
+        }
+
+        .cropper-line {
+            background-color: #ffc107;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-lg-6 col-md-8 mb-3">
+                        <span class="span"><strong>Upload KYC Documents:</strong></span>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span">KYC Document Type:</span>
+                        </div>
+                        <div class="col-lg-4 col-4" id="kycDocType">
+                            <select data-dropdown="kycDocumentTypes" id="kycDocumentTypes" class="form-select"></select>
+                        </div>
+                        <div class="col-lg-2 col-2">
+                            <button type="button" class="btn btn-sm btn-warning"
+                                id="updateKycDocumentType">Update</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="kycDocumentFront">KYC Document Front:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn"
+                                data-upload="kycDocumentFront">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="kycDocumentFront">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="kycDocumentBack">KYC Document Back:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn"
+                                data-upload="kycDocumentBack">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="kycDocumentBack">Delete</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-12 col-lg-4 col-md-8 mb-3">
+                        <span class="span"><strong>Upload Images: </strong></span>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="image1">Image 1:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="image1">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="image1">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="image2">Image 2:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="image2">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="image2">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="image3">Image 3:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="image3">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="image3">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="image4">Image 4:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="image4">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="image4">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span"id="image5">Image 5:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="image5">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="image5">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 col-lg-4">
+                            <span class="span" id="profileImage">Profile Image:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <button class="btn btn-sm btn-warning upload-btn" data-upload="profileImage">Upload</button>
+                            <button class="btn btn-sm btn-outline-danger delete-btn"
+                                data-delete="profileImage">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ <!-- Upload File Modal -->
+ <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" class="form-control" id="fileInput" name="fileInput"
+                        accept="image/jpeg, image/png" required />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="uploadFileBtn">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Crop Modal -->
+<div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="crop-container">
+                    <img id="cropImage" src="" alt="To Crop">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="cropSaveBtn">Crop and Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this file?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    console.log('userId :', userId);
+    const userRole = 'superAdmin';
+
+    const inputIds = ['kycDocumentTypes']
+
+     // Move fetchUserFiles function here, before DOMContentLoaded
+     function fetchUserFiles() {
+        fetch(`/api/getUserFiles/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const imgList = data.imgList;
+                const kyc = data.kyc;
+                const labelIds = ['kycDocumentFront', 'kycDocumentBack', 'image1', 'image2', 'image3', 'image4', 'image5', 'profileImage'];
+
+                const fileMappings = {
+                    'image1': imgList[0].imgUrl,
+                    'image2': imgList[1].imgUrl,
+                    'image3': imgList[2].imgUrl,
+                    'image4': imgList[3].imgUrl,
+                    'image5': imgList[4].imgUrl,
+                    'profileImage': imgList[5].imgUrl,
+                    'kycDocumentFront': kyc.kycDocumentFrontUrl,
+                    'kycDocumentBack': kyc.kycDocumentBackUrl
+                };
+
+                labelIds.forEach(context => {
+                    updateHeadingWithLink(context, fileMappings[context]);
+                });
+
+                for (const [context, url] of Object.entries(fileMappings)) {
+                    const deleteButton = document.querySelector(`button[data-delete="${context}"]`);
+                    if (url && url !== '') {
+                        deleteButton.removeAttribute('disabled');
+                    } else {
+                        deleteButton.setAttribute('disabled', 'true');
+                    }
+                }
+            }).catch(error => console.error('Error fetching user files:', error));
+    }
+
+    // Define field mappings                                                     
+    const fieldMappings = [
+        { inputId: 'kycDocumentTypes', fieldPath: 'kyc.kycDocumentType' }
+    ];
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+            if (inputElement.tagName.toLowerCase() === 'select') {
+                setSelectedOption(inputId, value);
+            } else {
+                changeInputValue(inputId, value);
+            }
+        });
+    }
+
+    // Event listener for the Save Changes button for kycDocumentType
+    document.getElementById('updateKycDocumentType').addEventListener('click', function () {
+        // Construct the updated data object dynamically
+        const updatedData = {};
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+
+
+    function updateHeadingWithLink(context, url) {
+      const labelElement = document.getElementById(`${context}`);
+            if (url && url !== '') {
+                labelElement.innerHTML = `<a href="${url}" target="_blank">${labelElement.innerText}</a>`;
+            } else {
+                labelElement.innerHTML = labelElement.innerText;  // Revert to plain text if no URL
+            }
+        }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        const uploadedFiles = {};
+        const customerId = userId;  // Replace with actual customer ID
+
+        // Function to handle upload button click
+        function handleUpload(button) {
+            button.addEventListener('click', function () {
+                const context = button.getAttribute('data-upload');
+                fileInput.value = ''; // Reset file input
+                // Set the context on the file input for reference
+                fileInput.setAttribute('data-context', context);
+                const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
+                document.getElementById('uploadFileBtn').setAttribute('data-context', context);
+                uploadModal.show();
+            });
+        }
+
+        // Function to handle delete button click
+        function handleDelete(button) {
+            button.addEventListener('click', function () {
+                const context = button.getAttribute('data-delete');
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                document.getElementById('confirmDeleteBtn').setAttribute('data-context', context);
+                deleteModal.show();
+            });
+        }
+
+        // Attach event listeners to upload buttons
+        document.querySelectorAll('.upload-btn').forEach(button => handleUpload(button));
+
+        // Attach event listeners to delete buttons
+        // document.querySelectorAll('.delete-btn').forEach(button => handleDelete(button));
+        // Disable delete buttons by default
+        
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.setAttribute('disabled', 'true'); // Disable all delete buttons by default
+            handleDelete(button); // Attach delete event listeners
+        });
+        
+        // Event listener for file upload button in modal
+        document.getElementById('uploadFileBtn').addEventListener('click', function () {
+            const context = this.getAttribute('data-context');
+            const file = fileInput.files[0];
+        
+            if (file) {
+                showLoader(); // Show loader while uploading
+                const formData = new FormData();
+                formData.append(context, file);
+                formData.append('customerId', customerId);
+            
+                const token = localStorage.getItem('token');
+                fetch('/api/uploadDocs', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    hideLoader(); // Hide loader after upload
+                    if (response.ok) { // Checks if status is in the 200-299 range
+                        return response.json().then(data => {
+                            fetchUserFiles(); // Refresh file list
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.message
+                            });
+                        });
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'File upload failed');
+                        });
+                    }
+                })
+                .catch(error => {
+                    hideLoader(); // Hide loader on error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message || 'An unexpected error occurred'
+                    });
+                    console.error('Error:', error);
+                });
+            
+                const uploadModal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+                uploadModal.hide(); // Hide upload modal after starting the upload
+            } else {
+                Swal.fire({
+                    icon: 'warning', 
+                    title: 'Oops...',
+                    text: 'Please select a file to upload.'
+                });
+            }
+        });
+
+        // Event listener for file delete button in modal
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            const context = this.getAttribute('data-context');
+            showLoader(); // Show loader while deleting
+
+            fetch('/api/deleteFile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    customerId: customerId,
+                    context: context
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoader(); // Hide loader after delete
+                    fetchUserFiles();    // Call fetchUserFiles on page load
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted',
+                        text: data.message
+                    });
+                })
+                .catch(error => {
+                    hideLoader(); // Hide loader after delete
+                    fetchUserFiles();    // Call fetchUserFiles on page load
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while deleting the file.'
+                    });
+                    console.error('Error:', error);
+                });
+
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+            deleteModal.hide(); // Hide delete modal after starting the delete
+        });
+
+        // Call fetchUserFiles on page load
+        fetchUserFiles();
+    });
+
+    // For dropdowns
+    populateDropdowns();
+  </script>
+
+<script>
+    let cropper;
+    const fileInput = document.getElementById('fileInput');
+    const cropImage = document.getElementById('cropImage');
+
+    // Handle Upload Button for Profile Image
+    // document.querySelector('button[data-upload="profileImage"]').addEventListener('click', function () {
+    //     fileInput.value = ''; // Reset file input
+    //     fileInput.click(); // Trigger file input click
+    // });
+
+    // Handle File Input Change
+    fileInput.addEventListener('change', function () {
+        const file = fileInput.files[0];
+        const context = this.getAttribute('data-context');
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                cropImage.src = event.target.result;
+                const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+                if (context === 'profileImage') {
+                cropModal.show();
+                }
+
+                // Wait for the modal to be fully shown before initializing cropper
+                document.getElementById('cropModal').addEventListener('shown.bs.modal', function () {
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 450 / 500,
+                        autoCropArea: 1,
+                        viewMode: 2,
+                        dragMode: 'move',
+                        cropBoxResizable: true,
+                        cropBoxMovable: true,
+                        responsive: true,
+                        restore: true,
+                        center: true,
+                        highlight: false,
+                        background: true,
+                        modal: true,
+                        guides: true,
+                        zoomable: true,
+                        zoomOnTouch: true,
+                        zoomOnWheel: true
+                    });
+                }, { once: true });
+            };
+            reader.readAsDataURL(file);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid File',
+                text: 'Please select a valid image file.'
+            });
+        }
+    });
+
+    // Handle Crop and Save Button
+    document.getElementById('cropSaveBtn').addEventListener('click', function () {
+        if (cropper) {
+            const croppedCanvas = cropper.getCroppedCanvas({
+                width: 450,
+                height: 500
+            });
+            croppedCanvas.toBlob(function (blob) {
+                showLoader(); // Show loader before upload starts
+                const formData = new FormData();
+                formData.append('profileImage', blob);
+                formData.append('customerId', userId);
+
+                const token = localStorage.getItem('token');
+                fetch('/api/uploadDocs', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                })
+                    .then(response => {
+                        hideLoader(); // Hide loader after response received
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Failed to upload cropped image');
+                        }
+                    })
+                    .then(data => {
+                        // First hide both modals
+                        const uploadModal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+                        const cropModal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
+                        uploadModal && uploadModal.hide();
+                        cropModal && cropModal.hide();
+
+                        // Then show success message and fetch new data
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message ||'Profile image uploaded successfully.'
+                        });
+                        
+                        // Fetch updated data
+                        fetchUserFiles();
+                    })
+                    .catch(error => {
+                        hideLoader(); // Hide loader on error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.message
+                        });
+                    });
+            }, 'image/jpeg');
+
+            const cropModal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
+            const uploadModal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+            uploadModal && uploadModal.hide();
+            cropModal && cropModal.hide();
+            cropper.destroy(); // Cleanup cropper instance
+        }
+    });
+
+    // Clean up cropper when modal is hidden
+    document.getElementById('cropModal').addEventListener('hidden.bs.modal', function () {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+    });
+</script>
+
+
+</html>

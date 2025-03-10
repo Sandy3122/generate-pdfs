@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education &amp Work Details</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-lg-4 col-md-8 mb-3">
+                        <span class="spanField"><strong>Education Details: </strong></span>
+                    </div>                    
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <span class="spanField">Education Level:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="heighestQualification" id="educationLevel" class="form-select" disabled></select>
+                            <!-- <select id="educationLevel" class="form-select" onchange="" disabled>
+                                <option value="ssc">SSC (10th)</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="diploma">Diploma</option>
+                                <option value="b.tech/b.e">B.Tech/B.E</option>
+                                <option value="masters">Masters</option>
+                                <option value="phd">PHD</option>
+                            </select> -->
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <span class="spanField">Education Field:</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="educationField" id="educationField" class="form-select" disabled></select>
+                            <!-- <select id="educationField" class="form-select" disabled>
+                                <option value="general">General</option>
+                                <option value="arts">Arts</option>
+                                <option value="science">Science</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="medical">Medical</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="technical">Technical</option>
+                                <option value="vocational">Vocational</option>
+                                <option value="computerScience">Computer Science</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="mechanical">Mechanical</option>
+                                <option value="civil">Civil</option>
+                                <option value="businessAdministration">Business Administration</option>
+                                <option value="informationTechnology">Information Technology</option>
+                                <option value="research">Research</option>
+                                <option value="select">Select</option>
+                            </select> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-12 col-md-8 mb-3">
+                        <span class="spanField"><strong>Work Details: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <span class="spanField">Working With:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="workingWith" id="workingWith" class="form-select" disabled></select>
+                            <!-- <select id="workingWith" class="form-select" disabled>
+                                <option value="privateCompany">Private Company</option>
+                                <option value="government">Government</option>
+                                <option value="selfEmployed">Self-Employed</option>
+                                <option value="freelancer">Freelancer</option>
+                                <option value="nonProfitOrganization">Non-Profit Organization</option>
+                                <option value="other">Other</option>
+                            </select> -->
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <span class="spanField">Designation:</span>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" id="designation" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <span class="spanField">Annual Income:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-6">
+                            <select data-dropdown="annualIncome" id="annualIncome" class="form-select" disabled></select>
+                            <!-- <select id="annualIncome" class="form-select" disabled>
+                                <option value="200000-400000">₹2,00,000 - ₹4,00,000</option>
+                                <option value="400001-600000">₹4,00,001 - ₹6,00,000</option>
+                                <option value="600001-800000">₹6,00,001 - ₹8,00,000</option>
+                                <option value="800001-1000000">₹8,00,001 - ₹10,00,000</option>
+                                <option value="1000001-1500000">₹10,00,001 - ₹15,00,000</option>
+                                <option value="1500001-2000000">₹15,00,001 - ₹20,00,000</option>
+                                <option value="2000001-2500000">₹20,00,001 - ₹25,00,000</option>
+                                <option value="2500001-3000000">₹25,00,001 - ₹30,00,000</option>
+                                <option value="3000001-3500000">₹30,00,001 - ₹35,00,000</option>
+                                <option value="3500001-4000000">₹35,00,001 - ₹40,00,000</option>
+                                <option value="4000001-4500000">₹40,00,001 - ₹45,00,000</option>
+                                <option value="4500001-5000000">₹45,00,001 - ₹50,00,000</option>
+                                <option value="5000001">Over ₹50,00,000</option>
+                            </select> -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+            
+        </div>
+    </div>
+</body>
+<script>
+    // Call fetchUserData function with userId, userRole, inputIds, and fieldMappings
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+    // console.log('userId :', userId)
+
+    
+    const inputIds = ['educationLevel', 'educationField', 'workingWith', 'designation', 'annualIncome'];
+
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+            if (inputElement.tagName.toLowerCase() === 'select') {
+                    setSelectedOption(inputId, value);
+            } else {
+                changeInputValue(inputId, value);
+            }
+        });
+    }
+
+    // Define field mappings
+    const fieldMappings = [
+        { inputId: 'educationLevel', fieldPath: 'educationLevel' },
+        { inputId: 'educationField', fieldPath: 'educationField' },
+        { inputId: 'workingWith', fieldPath: 'workingWith' },
+        { inputId: 'designation', fieldPath: 'designation' },
+        { inputId: 'annualIncome', fieldPath: 'annualIncome' }
+    ];
+
+    // fetchUserData(userId);
+    populateDropDownsAndFetchUserData(userId)
+
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function() {
+        // Construct the updated data object dynamically
+        const updatedData = {};
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+    </script>
+
+</html>

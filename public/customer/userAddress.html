@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="content">
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2">
+                    <div class="col-12 col-lg-4 col-md-8 mb-3">
+                        <span class="spanField"><strong>Current Address: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Country:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="currentCountry" class="form-select" disabled>
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">State:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="currentState" class="form-select" disabled>
+                                <!-- <option value="">Select State</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">City:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="currentCity" class="form-select" disabled>
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Town:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="currentTown" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-12 col-lg-5 col-md-8 mb-3">
+                        <span class="spanField"><strong>Permanent Address: </strong></span>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Country:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="permanentCountry" class="form-select" disabled title="Select State">
+                                <!-- <option value="">Select Country</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">State:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="permanentState" class="form-select" disabled>
+                                <!-- <option value="">Select State</option> -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">City:</span><span class="pdfField">*</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <select id="permanentCity" class="form-select" disabled>
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 col-lg-4">
+                            <span class="spanField">Town:</span>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <input type="text" id="permanentTown" class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center my-4 d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    // Call fetchUserData function with userId, userRole, inputIds, and fieldMappings
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+
+    
+    const inputIds = ['currentCountry', 'currentState', 'currentCity', 'currentTown', 'permanentCountry', 'permanentState', 'permanentCity', 'permanentTown'];
+
+    const countryData = {};
+    const stateData = {};
+
+    // Function to fetch country, state, and user data in sequence
+    const fetchDataAndPopulate = () => {
+        // Fetch country and state data first
+        fetch('/api/country-dropdown')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Country and State Data: ', data);
+                countryData.Country = { India: data.India };
+                stateData.State = data.India;
+ 
+                // Populate country and state dropdowns
+                populateCountryDropdowns(countryData);
+                populateStateDropdowns(stateData);
+
+                // Fetch user data after country and state dropdowns are populated
+                // return fetchUserData(userId);
+            })
+            .catch(error => console.error('Error fetching country, state, or user data:', error));
+    };
+
+    const populateCountryDropdowns = (data) => {
+    const currentCountrySelect = document.getElementById('currentCountry');
+    const permanentCountrySelect = document.getElementById('permanentCountry');
+
+    // Get the countries from the API response
+    const countries = Object.keys(data.Country); // Extract the country names (India, USA, etc.)
+
+    // Sort the countries alphabetically
+    countries.sort();
+
+    // Populate the dropdowns with sorted country names
+    countries.forEach(countryName => {
+        const option1 = new Option(countryName, countryName);
+        const option2 = new Option(countryName, countryName);
+        currentCountrySelect.add(option1);
+        permanentCountrySelect.add(option2);
+    });
+};
+
+
+    const populateStateDropdowns = (data) => {
+        const currentStateSelect = document.getElementById('currentState');
+        const permanentStateSelect = document.getElementById('permanentState');
+        const states = data.State;
+
+        
+        Object.keys(states).forEach(stateCode => {
+            // Capitalize the state name
+            const capitalizedState = capitalizeWordsWithSpaces(stateCode);
+
+            const option1 = new Option(capitalizedState, stateCode);
+            const option2 = new Option(capitalizedState, stateCode);
+
+            currentStateSelect.add(option1);
+            permanentStateSelect.add(option2);
+        });
+
+        // Manually trigger change event for the first item
+        if (currentStateSelect.options.length > 0) {
+            currentStateSelect.selectedIndex = 0;
+            populateCityDropdown({ target: currentStateSelect }, 'currentCity', data);
+        }
+        if (permanentStateSelect.options.length > 0) {
+            permanentStateSelect.selectedIndex = 0;
+            populateCityDropdown({ target: permanentStateSelect }, 'permanentCity', data);
+        }
+
+        // Add event listeners for state dropdown changes
+        currentStateSelect.addEventListener('change', (event) => populateCityDropdown(event, 'currentCity', data));
+        permanentStateSelect.addEventListener('change', (event) => populateCityDropdown(event, 'permanentCity', data));
+    };
+
+    const populateCityDropdown = (event, citySelectId, data, userData) => {
+    const citySelect = document.getElementById(citySelectId);
+    const selectedState = event.target.value;
+    const cities = data.State[selectedState] || {};
+    const userCity = citySelectId.includes('current')
+        ? getPropertyByPath(userData, 'currentAddress.city')
+        : getPropertyByPath(userData, 'permanentAddress.city');
+    
+    // If the state changes, only then clear the previous cities
+    if (event.type === 'change') {
+        citySelect.innerHTML = ''; // Clear cities only when the state is changed
+
+        // Add a default "Select City" option
+        const defaultOption = new Option('Select City', '');
+        citySelect.add(defaultOption);
+
+        // Populate the dropdown with new cities for the selected state
+        Object.keys(cities).forEach(cityCode => {
+            const option = new Option(cities[cityCode], cityCode);
+            citySelect.add(option);
+        });
+
+        // No previous city exists, set default selection
+        // citySelect.value = '';
+    }
+
+    // When fetching data (initial load), set the city from user data
+    if (userCity && citySelect.querySelector(`option[value="${userCity}"]`)) {
+        citySelect.value = userCity;
+    } else {
+        // citySelect.value = ''; // Default to "Select City" if no match is found
+    }
+};
+
+    function populateUserData(userData) {
+        fieldMappings.forEach(mapping => {
+            const { inputId, fieldPath } = mapping;
+            const value = getPropertyByPath(userData, fieldPath) || "";
+            const inputElement = document.getElementById(inputId);
+
+            if (inputElement.tagName === 'SELECT') {
+                // Ensure that the select element is populated with options
+                const options = Array.from(inputElement.options);
+                if (!options.find(option => option.value === value)) {
+                    const newOption = new Option(value, value, true, true);
+                    inputElement.add(newOption);
+                }
+                inputElement.value = value;
+            } else {
+                inputElement.value = value;
+            }
+        });
+    }
+
+    // Define field mappings
+    const fieldMappings = [
+        { inputId: 'currentCountry', fieldPath: 'currentAddress.currentCountry' },
+        { inputId: 'currentState', fieldPath: 'currentAddress.currentState' },
+        { inputId: 'currentCity', fieldPath: 'currentAddress.currentCity' },
+        { inputId: 'currentTown', fieldPath: 'currentAddress.currentTown' },
+        { inputId: 'permanentCountry', fieldPath: 'permanentAddress.permanentCountry' },
+        { inputId: 'permanentState', fieldPath: 'permanentAddress.permanentState' },
+        { inputId: 'permanentCity', fieldPath: 'permanentAddress.permanentCity' },
+        { inputId: 'permanentTown', fieldPath: 'permanentAddress.permanentTown' }
+    ];
+
+    // fetchUserData(userId);
+    
+    // Initiate the fetch sequence
+    // fetchDataAndPopulate(userId);
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+        // Construct the updated data object dynamically
+        const updatedData = {};
+        fieldMappings.forEach(mapping => {
+            updatedData[mapping.fieldPath] = document.getElementById(mapping.inputId).value;
+        });
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+
+    // Function to get property value by nested path
+    function getPropertyByPath(obj, path) {
+        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    }
+
+
+    async function fetchDataProperly(userId) {
+    try {
+        showLoader();
+        
+        await fetchDataAndPopulate();
+
+        // Once dropdowns are populated, fetch the user data
+        await fetchUserData(userId);
+
+        hideLoader();
+    } catch (error) {
+        console.error('Error while fetching the data:', error);
+        hideLoader();
+    }
+}
+
+fetchDataProperly(userId)
+
+</script>
+
+</html>

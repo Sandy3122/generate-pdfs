@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Data</title>
+  <!-- Rendering all script tags and CDNS -->
+  <script src="/js/customer/allScripts.js"></script>
+  <!-- Data Table CDNS And Custom CSS -->
+  <script src="/js/common/dataTablesCdns.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid mt-1">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Image Verification</h3>
+        <div class="buttonsDiv"></div>
+        <div class="table-responsive vh-100">
+          <table id="userDataTable" class="table table-bordered">
+            <thead class="table-dark">
+              <tr class="text-center">
+                <th>User ID</th>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Image Link</th>
+                <th>Status</th>
+                <th>Submit</th>
+              </tr>
+            </thead>
+            <tbody id="userData">
+              <!-- Employee details will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+async function fetchImageListData() {
+  try {
+    // Show loader
+    showLoader();
+
+    // Fetch user data
+    const userData = await fetchImageList();
+
+    const userDataContainer = document.getElementById("userData");
+
+    // Clear existing user data from the table
+    userDataContainer.innerHTML = "";
+
+    userData.forEach(user => {
+      // console.log('user: ', user)
+      if (user && user.imgList) { // Check if user and user.imgList exist
+        user.imgList.forEach((img, imgIndex) => {
+          if (img.imgVerificationStatus === 'pending' && img.imgUrl) {
+            const row = document.createElement("tr");
+            row.classList.add("text-center");
+
+            // Add user data to table row
+            row.innerHTML = `
+                        <td>${user.id || ""}</td>
+                        <td>${user.customerId || ""}</td>
+                        <td class="textCapitalize">${user.firstName || ""} ${user.lastName || ""}</td>
+                        <td>${user.registeredMobileNumber || ""}</td>
+                        <td><a href="${img.imgUrl || ""}" target="_blank">${imgIndex === 5 ? "Profile Image" : `Image ${imgIndex}`}</a></td>
+                        <td>
+                          <div class="dropdown">
+                              <select id="status-${user.id}-${imgIndex}" class="form-select">
+                                  <option value="pending" ${img.imgVerificationStatus === 'pending' ? 'selected' : ''}>Pending</option>
+                                  <option value="verified" ${img.imgVerificationStatus === 'verified' ? 'selected' : ''}>Verified</option>
+                                  <option value="rejected" ${img.imgVerificationStatus === 'rejected' ? 'selected' : ''}>Rejected</option>
+                              </select>
+                          </div>
+                        </td>
+                        <td>
+                          <button class="btn btn-danger btn-sm" onclick="submitStatus('${user.id}', ${imgIndex})">Submit</button>
+                        </td>
+                    `;
+
+            userDataContainer.appendChild(row);
+          }
+        });
+      }
+    });
+
+    // Hide loader
+    hideLoader();
+    
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    // Display error message using SweetAlert
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message || 'Error fetching user data. Please try again later.',
+    });
+  }
+}
+
+
+async function getUserDataAndFetchImageList() {
+    try {
+      const sessionData = await fetchSessionData();
+      const userRole = sessionData.role;
+      console.log(userRole)
+      await fetchImageListData();
+
+      // Define button options array based on available options
+      const buttonOptions = [];
+        buttonOptions.push({
+          type: 'copyHtml5',
+          text: 'Copy',
+          className: 'tableBtn btn-primary',
+          exportOptions: {
+            format: {
+              body: function (data, row, column, node) {
+                if (column === 4) {
+                  return node.firstChild.href;
+                }
+                if (column !== 4) {
+                  return node.textContent.trim();
+                }
+                return data;
+              }
+            }
+          }
+        });
+        buttonOptions.push({
+          type: 'csvHtml5',
+          text: 'CSV',
+          className: 'tableBtn btn-primary',
+          exportOptions: {
+            format: {
+              body: function (data, row, column, node) {
+                if (column === 4) {
+                  return node.firstChild.href;
+                }
+                if (column !== 4) {
+                  return node.textContent.trim();
+                }
+                return data;
+              }
+            }
+          }
+        });
+
+      initializeDataTable(userRole, buttonOptions);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+// Call the function to start fetching and displaying user data
+getUserDataAndFetchImageList();
+
+// Function to handle image status submission
+async function submitStatus(userId, imgIndex) {
+  const statusSelect = document.getElementById(`status-${userId}-${imgIndex}`);
+
+  const updateFields = {
+    imgVerificationStatus: statusSelect.value,
+  };
+  try {
+    // Update image status
+    const message = await updateImageStatus(userId, imgIndex, updateFields);
+    // Show success message
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: message,
+    }).then(async () => {
+      // Fetch and display updated data
+      await fetchImageListData();
+      // Destroy the existing DataTable and initialize it again with updated data
+      const dataTable = $('#userDataTable').DataTable();
+      dataTable.destroy();
+      getUserDataAndFetchImageList();    });
+  } catch (error) {
+    // Show error message
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message || 'Failed to update image status. Please try again later.',
+    });
+  }
+}
+  
+  </script>
+
+</html>

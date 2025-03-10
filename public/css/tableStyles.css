@@ -1,0 +1,76 @@
+.status-active {
+    color: green !important;
+}
+
+.status-inactive {
+    color: red !important;
+}
+
+.role-user {
+    color: blue !important;
+}
+
+.role-employee {
+    color: orange !important;
+}
+
+.role-manager {
+    color: purple !important;
+}
+
+.role-admin {
+    color: red !important;
+}
+
+.role-super-admin {
+    color: gold !important;
+}
+
+.role-third-party-agent {
+    color: grey !important;
+}
+
+body {
+    background-color: #f8f9fa; /* Setting a light background color */
+}
+
+.table {
+    /* background-color: #fff; */
+}
+
+.table thead th {
+    border-bottom: none; /* Removing border-bottom for table header */
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #dee2e6; /* Adding a bottom border for table rows */
+}
+
+/* .table-bordered th,
+.table-bordered td {
+    border: none;
+}
+
+.table-bordered {
+    border: none;
+} */
+
+.route-names {
+    display: block !important;
+}
+
+.checkbox-wrapper {
+    margin-bottom: 5px !important; /* Adjust as needed */
+}
+
+.wrap-text {
+    white-space: pre-wrap !important;
+}
+
+#accessed-routes {
+    width: 500px !important;
+}
+
+.textCapitalize{
+    text-transform: capitalize !important;
+}

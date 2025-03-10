@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Admin</title>
+    <!-- Rendering all script tags and CDNS -->
+    <script src="/js/customer/allScripts.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="content m-2">
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Profile ID:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <span id="profileId"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Profile Registered By Id:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <span id="profileRegisteredById"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Profile Registered By Name:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <span id="profileRegisteredByName"></span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Block Profile:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="blockProfile" id="blockProfile" class="form-select" disabled></select>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Hide Profile:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="hideProfile" id="hideProfile" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Delete Profile:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <select data-dropdown="deleteProfile" id="deleteProfile" class="form-select" disabled></select>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5 col-lg-3">
+                    <span class="spanField">Reason for Delete:</span>
+                </div>
+                <div class="col-lg-3 col-4">
+                    <textarea name="" id="reasonForDelete" class="form-control" cols="30" rows="3" value=""
+                        disabled></textarea>
+                </div>
+            </div>
+            <div class="text-center my-4  d-flex justify-content-center">
+                <button id="saveChanges" class="btn btn-sm btn-outline-danger">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    // Function to populate user data to elements
+    function populateUserData(userData) {
+        const accountCreatedData = String(userData.accountCreatedBy);
+        const [accountCreatedByName, accountCreatedById, accountCreatedByPhone, accountCreatedTime] = accountCreatedData.split('/')
+
+        setInnerHTMLById("profileId", userData.customerId || "null");
+        setInnerHTMLById("profileRegisteredById", capitalizeWords(accountCreatedById) || "null");
+        setInnerHTMLById("profileRegisteredByName", capitalizeWords(accountCreatedByName) || "null");
+        setSelectedOption("blockProfile", userData.blockProfile || 'null');
+        setSelectedOption("hideProfile", userData.hideProfile || "null");
+        setSelectedOption("deleteProfile", userData.deleteProfile || "null");
+        changeInputValue("reasonForDelete", userData.reasonForDelete || "");
+    }
+
+    // Fetching dropdowns and user data in sequence
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userId = urlParams.get('userId');
+
+    // Call the initialization function to fetch both dropdwons and data
+    populateDropDownsAndFetchUserData(userId);
+
+    // Event listener for the Save Changes button
+    document.getElementById('saveChanges').addEventListener('click', function () {
+        // Construct the updated data object
+        const inputIds = ['blockProfile', 'hideProfile', 'deleteProfile', 'reasonForDelete'];
+        const updatedData = {};
+        inputIds.forEach(inputId => {
+            updatedData[inputId] = document.getElementById(inputId).value;
+        });
+
+        // Call the function to update user data
+        updateUserData(userId, updatedData);
+    });
+</script>
+
+</html>
