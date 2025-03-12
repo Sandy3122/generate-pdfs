@@ -191,35 +191,39 @@ router.get('/generateProfilesPdf/:id?', async (req, res) => {
         // Wait for profile data processing
         const profileDataArray = await processProfileData(retrievedDataArray);
 
-        let outputPath;
-        if (profileDataArray.length === 1) {
-            outputPath = await generatePdfFunction(profileDataArray);
-        } else {
-            const maxProfiles = profileDataArray.length; // Adjust if needed
-            const limitedProfiles = profileDataArray.slice(0, maxProfiles);
-            outputPath = await generatePdfFunction(limitedProfiles);
+        const result = await generatePdfFunction(profileDataArray);
+
+        if (!result.success) {
+            throw new Error(result.message || 'PDF generation failed');
         }
 
         // Send PDF response
-        res.download(outputPath.path, 'profiles.pdf', (err) => {
+        res.download(result.path, 'profiles.pdf', (err) => {
             if (err) {
                 console.error('Error during file download:', err);
-                // Clean up file even if download fails
-                fs.unlink(outputPath.path, (unlinkErr) => {
-                    if (unlinkErr) console.error('Error deleting file:', unlinkErr);
-                });
                 return res.status(500).json({ error: "Failed to download the PDF file." });
             }
             
-            // Clean up both original and compressed files
-            const originalPath = outputPath.path.replace('_compressed.pdf', '.pdf');
-            fs.unlink(originalPath, (unlinkErr) => {
-                if (unlinkErr) console.error('Error deleting original file:', unlinkErr);
-            });
-            
-            fs.unlink(outputPath.path, (unlinkErr) => {
-                if (unlinkErr) console.error('Error deleting compressed file:', unlinkErr);
-            });
+            // Cleanup function
+            const cleanupFiles = () => {
+                const filesToDelete = [
+                    result.path,
+                    result.path.replace('_compressed.pdf', '.pdf')
+                ];
+
+                filesToDelete.forEach(file => {
+                    if (fs.existsSync(file)) {
+                        fs.unlink(file, (unlinkErr) => {
+                            if (unlinkErr) {
+                                console.error(`Error deleting file ${file}:`, unlinkErr);
+                            }
+                        });
+                    }
+                });
+            };
+
+            // Delay cleanup to ensure file is fully downloaded
+            setTimeout(cleanupFiles, 2000); // Increased delay to 2 seconds
         });
 
     } catch (error) {

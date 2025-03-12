@@ -8,27 +8,29 @@ const { exec } = require('child_process');
 // Path to the EJS template
 const templatePath = path.join(__dirname, '.', 'template', 'profileTemplate.ejs');
 
-// Function to compress PDF using Ghostscript without losing quality
-const compressPdf = (inputPath, outputPath, quality = 'printer') => {
-    return new Promise((resolve, reject) => {
-        const gsCommand = `
-            gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
-            -dPDFSETTINGS=/${quality} \
-            -dDownsampleColorImages=false \
-            -dAutoFilterColorImages=true \
-            -dJPEGQ=85 \
-            -dNOPAUSE -dQUIET -dBATCH \
-            -sOutputFile=${outputPath} ${inputPath}`;
+// Function to compress PDF using pure JavaScript approach
+const compressPdf = async (inputPath, outputPath) => {
+    try {
+        // Read the input PDF
+        const pdfBuffer = fs.readFileSync(inputPath);
+        const pdfDoc = await PDFDocument.load(pdfBuffer);
 
-        exec(gsCommand, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error during PDF compression: ${error.message}`);
-                return reject(error);
-            }
-            console.log(`PDF compression completed. Output file: ${outputPath}`);
-            resolve(outputPath);
+        // Compress using pdf-lib's default compression
+        const compressedPdfBytes = await pdfDoc.save({
+            useObjectStreams: true,
+            addDefaultPage: false,
+            compress: true
         });
-    });
+
+        // Write the compressed PDF
+        fs.writeFileSync(outputPath, compressedPdfBytes);
+        console.log(`PDF compression completed. Output file: ${outputPath}`);
+        return outputPath;
+    } catch (error) {
+        console.error('Error during PDF compression:', error);
+        // If compression fails, return original file
+        return inputPath;
+    }
 };
 
 // PDF generation logic
@@ -210,36 +212,28 @@ const generatePdfFunction = async (profiles) => {
             throw new Error('Profiles data is required');
         }
 
-        if(profiles.length === 1){
-            outputPath = await generatePdf(profiles[0]);
-        } else {
-            outputPath = await generateMultiPagePdf(profiles);
+        // Generate PDF
+        outputPath = profiles.length === 1 
+            ? await generatePdf(profiles[0]) 
+            : await generateMultiPagePdf(profiles);
+
+        // Ensure output path exists
+        if (!fs.existsSync(outputPath)) {
+            throw new Error('PDF generation failed - output file not found');
         }
 
-        // Compress the generated PDF
+        // Create compressed version
         compressedOutputPath = outputPath.replace('.pdf', '_compressed.pdf');
-        await compressPdf(outputPath, compressedOutputPath);
+        const finalPath = await compressPdf(outputPath, compressedOutputPath);
 
         return {
             success: true,
             message: 'PDF generated successfully',
-            path: compressedOutputPath,
+            path: finalPath
         };
     } catch (error) {
-        // Clean up any files that might have been created before the error
-        if (outputPath && fs.existsSync(outputPath)) {
-            fs.unlinkSync(outputPath);
-        }
-        if (compressedOutputPath && fs.existsSync(compressedOutputPath)) {
-            fs.unlinkSync(compressedOutputPath);
-        }
-        
         console.error('Error in generatePdfFunction:', error);
-        return {
-            success: false,
-            message: 'Internal Server Error. PDF generation failed.',
-            error: error.message,
-        };
+        throw error;
     }
 };
 
