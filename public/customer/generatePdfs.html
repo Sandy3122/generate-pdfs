@@ -247,15 +247,36 @@
 
     async function generatePdf(documentId = null) {
       try {
+        // If no specific documentId is provided, get filtered IDs from DataTable
+        let userIds = [];
+        if (!documentId) {
+          // Get all visible rows from the filtered DataTable
+          const filteredRows = dataTable.rows({ search: 'applied' }).data();
+          
+          // Extract user IDs from the filtered rows
+          filteredRows.each(row => {
+            userIds.push(row[0]); // Assuming user ID is in the first column
+          });
+
+          // If no rows are filtered/visible, show warning
+          if (userIds.length === 0) {
+            return Swal.fire({
+              icon: 'warning',
+              title: 'No Data Selected',
+              text: 'No records found in the current filter. Please adjust your filters and try again.',
+            });
+          }
+        }
+
         const url = documentId
           ? `/api/generateProfilesPdf/${documentId}`
-          : `/api/generateProfilesPdf`;
+          : `/api/generateProfilesPdf?ids=${userIds.join(',')}`;
 
         const confirmation = await Swal.fire({
           title: 'Are you sure?',
           text: documentId
             ? `Generate PDF for user ID: ${documentId}?`
-            : 'Generate PDFs for all users?',
+            : `Generate PDFs for ${userIds.length} filtered users?`,
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Yes, generate',

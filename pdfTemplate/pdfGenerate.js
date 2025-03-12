@@ -110,19 +110,32 @@ router.get('/generateProfilesPdf/:id?', async (req, res) => {
         console.log('Testing PDF generation...');
         res.setTimeout(540000); // 9 minutes timeout
         const { id } = req.params;
+        const { ids } = req.query; // Add this line to get filtered IDs from query
 
         // Reference Firestore collection
         const collectionRef = db.collection('appusers');
         let snapshot;
 
         if (id) {
+            // Single ID case
             const docRef = collectionRef.doc(id);
             snapshot = await docRef.get();
             if (!snapshot.exists) {
                 return res.status(404).json({ error: "Record not found for the provided ID." });
             }
             snapshot = [snapshot]; // Convert to array for consistency
+        } else if (ids) {
+            // Multiple filtered IDs case
+            const idArray = ids.split(',');
+            const snapshots = await Promise.all(
+                idArray.map(userId => collectionRef.doc(userId).get())
+            );
+            snapshot = snapshots.filter(doc => doc.exists);
+            if (snapshot.length === 0) {
+                return res.status(404).json({ error: "No records found for the provided IDs." });
+            }
         } else {
+            // All records case
             snapshot = await collectionRef.get();
             if (snapshot.empty) {
                 return res.status(404).json({ error: "No records found in the 'appusers' collection." });
